@@ -1,0 +1,79 @@
+service: ecommerce-muebles-ar-backend
+
+useDotenv: true
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  region: us-east-1
+  environment:
+    DATABASE_URL: ${env:DATABASE_URL}
+  httpApi:
+    authorizers:
+      cognitoAuthorizer:
+        type: jwt
+        identitySource: $request.header.Authorization
+        issuerUrl: https://cognito-idp.us-east-1.amazonaws.com/us-east-1_3wUuOTyhl
+        audience:
+          - 2cv3c6ugmn0qg33h64s8n6iqlq
+
+plugins:
+  - serverless-offline
+
+functions:
+  getCategories:
+    handler: src/products/getCategories.handler
+    events:
+      - httpApi:
+          path: /categories
+          method: GET
+
+  getProducts:
+    handler: src/products/getProducts.handler
+    events:
+      - httpApi:
+          path: /products
+          method: GET
+
+  getProductById:
+    handler: src/products/getProductById.handler
+    events:
+      - httpApi:
+          path: /products/{id}
+          method: GET
+
+  whoami:
+    handler: src/auth/whoami.handler
+    events:
+      - httpApi:
+          path: /whoami
+          method: GET
+          authorizer:
+            name: cognitoAuthorizer
+
+  getFavorites:
+    handler: src/favorites/getFavorites.handler
+    events:
+      - httpApi:
+          path: /favorites
+          method: GET
+          authorizer:
+            name: cognitoAuthorizer
+
+  addFavorite:
+    handler: src/favorites/addFavorite.handler
+    events:
+      - httpApi:
+          path: /favorites
+          method: POST
+          authorizer:
+            name: cognitoAuthorizer
+
+  removeFavorite:
+    handler: src/favorites/removeFavorite.handler
+    events:
+      - httpApi:
+          path: /favorites/{productId}
+          method: DELETE
+          authorizer:
+            name: cognitoAuthorizer

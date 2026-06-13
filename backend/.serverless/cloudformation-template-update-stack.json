@@ -1,0 +1,1077 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "The AWS CloudFormation template for this Serverless application",
+  "Resources": {
+    "GetCategoriesLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/ecommerce-muebles-ar-backend-dev-getCategories"
+      }
+    },
+    "GetProductsLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/ecommerce-muebles-ar-backend-dev-getProducts"
+      }
+    },
+    "GetProductByIdLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/ecommerce-muebles-ar-backend-dev-getProductById"
+      }
+    },
+    "WhoamiLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/ecommerce-muebles-ar-backend-dev-whoami"
+      }
+    },
+    "GetFavoritesLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/ecommerce-muebles-ar-backend-dev-getFavorites"
+      }
+    },
+    "AddFavoriteLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/ecommerce-muebles-ar-backend-dev-addFavorite"
+      }
+    },
+    "RemoveFavoriteLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/ecommerce-muebles-ar-backend-dev-removeFavorite"
+      }
+    },
+    "IamRoleLambdaExecution": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": [
+                  "lambda.amazonaws.com"
+                ]
+              },
+              "Action": [
+                "sts:AssumeRole"
+              ]
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": {
+              "Fn::Join": [
+                "-",
+                [
+                  "ecommerce-muebles-ar-backend",
+                  "dev",
+                  "lambda"
+                ]
+              ]
+            },
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "logs:CreateLogStream",
+                    "logs:CreateLogGroup",
+                    "logs:TagResource"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/ecommerce-muebles-ar-backend-dev*:*"
+                    }
+                  ]
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "logs:PutLogEvents"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/ecommerce-muebles-ar-backend-dev*:*:*"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ],
+        "Path": "/",
+        "RoleName": {
+          "Fn::Join": [
+            "-",
+            [
+              "ecommerce-muebles-ar-backend",
+              "dev",
+              {
+                "Ref": "AWS::Region"
+              },
+              "lambdaRole"
+            ]
+          ]
+        }
+      }
+    },
+    "GetCategoriesLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": "serverless-framework-deployments-us-east-1-11f73fcd-160a",
+          "S3Key": "serverless/ecommerce-muebles-ar-backend/dev/1781313638565-2026-06-13T01:20:38.565Z/ecommerce-muebles-ar-backend.zip"
+        },
+        "Handler": "src/products/getCategories.handler",
+        "Runtime": "nodejs20.x",
+        "FunctionName": "ecommerce-muebles-ar-backend-dev-getCategories",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "DATABASE_URL": "postgresql://postgres.vkqbaysalcleqyrwgacb:ProyectTecEmer2026@aws-1-us-east-1.pooler.supabase.com:6543/postgres"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "GetCategoriesLogGroup"
+      ]
+    },
+    "GetProductsLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": "serverless-framework-deployments-us-east-1-11f73fcd-160a",
+          "S3Key": "serverless/ecommerce-muebles-ar-backend/dev/1781313638565-2026-06-13T01:20:38.565Z/ecommerce-muebles-ar-backend.zip"
+        },
+        "Handler": "src/products/getProducts.handler",
+        "Runtime": "nodejs20.x",
+        "FunctionName": "ecommerce-muebles-ar-backend-dev-getProducts",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "DATABASE_URL": "postgresql://postgres.vkqbaysalcleqyrwgacb:ProyectTecEmer2026@aws-1-us-east-1.pooler.supabase.com:6543/postgres"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "GetProductsLogGroup"
+      ]
+    },
+    "GetProductByIdLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": "serverless-framework-deployments-us-east-1-11f73fcd-160a",
+          "S3Key": "serverless/ecommerce-muebles-ar-backend/dev/1781313638565-2026-06-13T01:20:38.565Z/ecommerce-muebles-ar-backend.zip"
+        },
+        "Handler": "src/products/getProductById.handler",
+        "Runtime": "nodejs20.x",
+        "FunctionName": "ecommerce-muebles-ar-backend-dev-getProductById",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "DATABASE_URL": "postgresql://postgres.vkqbaysalcleqyrwgacb:ProyectTecEmer2026@aws-1-us-east-1.pooler.supabase.com:6543/postgres"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "GetProductByIdLogGroup"
+      ]
+    },
+    "WhoamiLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": "serverless-framework-deployments-us-east-1-11f73fcd-160a",
+          "S3Key": "serverless/ecommerce-muebles-ar-backend/dev/1781313638565-2026-06-13T01:20:38.565Z/ecommerce-muebles-ar-backend.zip"
+        },
+        "Handler": "src/auth/whoami.handler",
+        "Runtime": "nodejs20.x",
+        "FunctionName": "ecommerce-muebles-ar-backend-dev-whoami",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "DATABASE_URL": "postgresql://postgres.vkqbaysalcleqyrwgacb:ProyectTecEmer2026@aws-1-us-east-1.pooler.supabase.com:6543/postgres"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "WhoamiLogGroup"
+      ]
+    },
+    "GetFavoritesLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": "serverless-framework-deployments-us-east-1-11f73fcd-160a",
+          "S3Key": "serverless/ecommerce-muebles-ar-backend/dev/1781313638565-2026-06-13T01:20:38.565Z/ecommerce-muebles-ar-backend.zip"
+        },
+        "Handler": "src/favorites/getFavorites.handler",
+        "Runtime": "nodejs20.x",
+        "FunctionName": "ecommerce-muebles-ar-backend-dev-getFavorites",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "DATABASE_URL": "postgresql://postgres.vkqbaysalcleqyrwgacb:ProyectTecEmer2026@aws-1-us-east-1.pooler.supabase.com:6543/postgres"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "GetFavoritesLogGroup"
+      ]
+    },
+    "AddFavoriteLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": "serverless-framework-deployments-us-east-1-11f73fcd-160a",
+          "S3Key": "serverless/ecommerce-muebles-ar-backend/dev/1781313638565-2026-06-13T01:20:38.565Z/ecommerce-muebles-ar-backend.zip"
+        },
+        "Handler": "src/favorites/addFavorite.handler",
+        "Runtime": "nodejs20.x",
+        "FunctionName": "ecommerce-muebles-ar-backend-dev-addFavorite",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "DATABASE_URL": "postgresql://postgres.vkqbaysalcleqyrwgacb:ProyectTecEmer2026@aws-1-us-east-1.pooler.supabase.com:6543/postgres"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "AddFavoriteLogGroup"
+      ]
+    },
+    "RemoveFavoriteLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": "serverless-framework-deployments-us-east-1-11f73fcd-160a",
+          "S3Key": "serverless/ecommerce-muebles-ar-backend/dev/1781313638565-2026-06-13T01:20:38.565Z/ecommerce-muebles-ar-backend.zip"
+        },
+        "Handler": "src/favorites/removeFavorite.handler",
+        "Runtime": "nodejs20.x",
+        "FunctionName": "ecommerce-muebles-ar-backend-dev-removeFavorite",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "DATABASE_URL": "postgresql://postgres.vkqbaysalcleqyrwgacb:ProyectTecEmer2026@aws-1-us-east-1.pooler.supabase.com:6543/postgres"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "RemoveFavoriteLogGroup"
+      ]
+    },
+    "GetCategoriesLambdaVersionvYqLwEkIzyrHZEjoIJ9Mip5T1icIeWrZcEsfipFMNqQ": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "GetCategoriesLambdaFunction"
+        },
+        "CodeSha256": "P2JZ5yAasp4VgG0fLuK/QTQ4gEhdIUE4W/gom9INPYA="
+      }
+    },
+    "GetProductsLambdaVersion0AN3Xq7mLIQPsNB1AonjD6w6HDmG6vvaOIHdujlDqI": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "GetProductsLambdaFunction"
+        },
+        "CodeSha256": "P2JZ5yAasp4VgG0fLuK/QTQ4gEhdIUE4W/gom9INPYA="
+      }
+    },
+    "GetProductByIdLambdaVersionfI9y2YrYQQBq2dD6A2vwozbl6TcDmZzmW80IPuIpWo": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "GetProductByIdLambdaFunction"
+        },
+        "CodeSha256": "P2JZ5yAasp4VgG0fLuK/QTQ4gEhdIUE4W/gom9INPYA="
+      }
+    },
+    "WhoamiLambdaVersioneCDmFMK5LmOchVdR29o0m9GFdL5akoxJB9fkDrq4": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "WhoamiLambdaFunction"
+        },
+        "CodeSha256": "P2JZ5yAasp4VgG0fLuK/QTQ4gEhdIUE4W/gom9INPYA="
+      }
+    },
+    "GetFavoritesLambdaVersionRxJESQkjV4Hryfnzrj1TkVR3RV6tPlIruZnDjoesn8": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "GetFavoritesLambdaFunction"
+        },
+        "CodeSha256": "P2JZ5yAasp4VgG0fLuK/QTQ4gEhdIUE4W/gom9INPYA="
+      }
+    },
+    "AddFavoriteLambdaVersionR7qMaRi9aJh5zcacVuIIslauiRuClMOhE23gLg": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "AddFavoriteLambdaFunction"
+        },
+        "CodeSha256": "P2JZ5yAasp4VgG0fLuK/QTQ4gEhdIUE4W/gom9INPYA="
+      }
+    },
+    "RemoveFavoriteLambdaVersion5aC95myawAKLzC5RkUfthPxmmovJURTjpROsscm6M": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "RemoveFavoriteLambdaFunction"
+        },
+        "CodeSha256": "P2JZ5yAasp4VgG0fLuK/QTQ4gEhdIUE4W/gom9INPYA="
+      }
+    },
+    "HttpApi": {
+      "Type": "AWS::ApiGatewayV2::Api",
+      "Properties": {
+        "Name": "dev-ecommerce-muebles-ar-backend",
+        "ProtocolType": "HTTP"
+      }
+    },
+    "HttpApiStage": {
+      "Type": "AWS::ApiGatewayV2::Stage",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "StageName": "$default",
+        "AutoDeploy": true,
+        "DefaultRouteSettings": {
+          "DetailedMetricsEnabled": false
+        }
+      }
+    },
+    "HttpApiAuthorizerCognitoAuthorizer": {
+      "Type": "AWS::ApiGatewayV2::Authorizer",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "Name": "cognitoAuthorizer",
+        "IdentitySource": [
+          "$request.header.Authorization"
+        ],
+        "AuthorizerType": "JWT",
+        "JwtConfiguration": {
+          "Audience": [
+            "2cv3c6ugmn0qg33h64s8n6iqlq"
+          ],
+          "Issuer": "https://cognito-idp.us-east-1.amazonaws.com/us-east-1_3wUuOTyhl"
+        }
+      }
+    },
+    "GetCategoriesLambdaPermissionHttpApi": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "GetCategoriesLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "HttpApi"
+              },
+              "/*"
+            ]
+          ]
+        }
+      }
+    },
+    "HttpApiIntegrationGetCategories": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::GetAtt": [
+            "GetCategoriesLambdaFunction",
+            "Arn"
+          ]
+        },
+        "PayloadFormatVersion": "2.0",
+        "TimeoutInMillis": 30000
+      }
+    },
+    "HttpApiRouteGetCategories": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "RouteKey": "GET /categories",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "HttpApiIntegrationGetCategories"
+              }
+            ]
+          ]
+        }
+      },
+      "DependsOn": "HttpApiIntegrationGetCategories"
+    },
+    "GetProductsLambdaPermissionHttpApi": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "GetProductsLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "HttpApi"
+              },
+              "/*"
+            ]
+          ]
+        }
+      }
+    },
+    "HttpApiIntegrationGetProducts": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::GetAtt": [
+            "GetProductsLambdaFunction",
+            "Arn"
+          ]
+        },
+        "PayloadFormatVersion": "2.0",
+        "TimeoutInMillis": 30000
+      }
+    },
+    "HttpApiRouteGetProducts": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "RouteKey": "GET /products",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "HttpApiIntegrationGetProducts"
+              }
+            ]
+          ]
+        }
+      },
+      "DependsOn": "HttpApiIntegrationGetProducts"
+    },
+    "GetProductByIdLambdaPermissionHttpApi": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "GetProductByIdLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "HttpApi"
+              },
+              "/*"
+            ]
+          ]
+        }
+      }
+    },
+    "HttpApiIntegrationGetProductById": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::GetAtt": [
+            "GetProductByIdLambdaFunction",
+            "Arn"
+          ]
+        },
+        "PayloadFormatVersion": "2.0",
+        "TimeoutInMillis": 30000
+      }
+    },
+    "HttpApiRouteGetProductsIdVar": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "RouteKey": "GET /products/{id}",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "HttpApiIntegrationGetProductById"
+              }
+            ]
+          ]
+        }
+      },
+      "DependsOn": "HttpApiIntegrationGetProductById"
+    },
+    "WhoamiLambdaPermissionHttpApi": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "WhoamiLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "HttpApi"
+              },
+              "/*"
+            ]
+          ]
+        }
+      }
+    },
+    "HttpApiIntegrationWhoami": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::GetAtt": [
+            "WhoamiLambdaFunction",
+            "Arn"
+          ]
+        },
+        "PayloadFormatVersion": "2.0",
+        "TimeoutInMillis": 30000
+      }
+    },
+    "HttpApiRouteGetWhoami": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "RouteKey": "GET /whoami",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "HttpApiIntegrationWhoami"
+              }
+            ]
+          ]
+        },
+        "AuthorizationType": "JWT",
+        "AuthorizerId": {
+          "Ref": "HttpApiAuthorizerCognitoAuthorizer"
+        }
+      },
+      "DependsOn": "HttpApiIntegrationWhoami"
+    },
+    "GetFavoritesLambdaPermissionHttpApi": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "GetFavoritesLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "HttpApi"
+              },
+              "/*"
+            ]
+          ]
+        }
+      }
+    },
+    "HttpApiIntegrationGetFavorites": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::GetAtt": [
+            "GetFavoritesLambdaFunction",
+            "Arn"
+          ]
+        },
+        "PayloadFormatVersion": "2.0",
+        "TimeoutInMillis": 30000
+      }
+    },
+    "HttpApiRouteGetFavorites": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "RouteKey": "GET /favorites",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "HttpApiIntegrationGetFavorites"
+              }
+            ]
+          ]
+        },
+        "AuthorizationType": "JWT",
+        "AuthorizerId": {
+          "Ref": "HttpApiAuthorizerCognitoAuthorizer"
+        }
+      },
+      "DependsOn": "HttpApiIntegrationGetFavorites"
+    },
+    "AddFavoriteLambdaPermissionHttpApi": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "AddFavoriteLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "HttpApi"
+              },
+              "/*"
+            ]
+          ]
+        }
+      }
+    },
+    "HttpApiIntegrationAddFavorite": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::GetAtt": [
+            "AddFavoriteLambdaFunction",
+            "Arn"
+          ]
+        },
+        "PayloadFormatVersion": "2.0",
+        "TimeoutInMillis": 30000
+      }
+    },
+    "HttpApiRoutePostFavorites": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "RouteKey": "POST /favorites",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "HttpApiIntegrationAddFavorite"
+              }
+            ]
+          ]
+        },
+        "AuthorizationType": "JWT",
+        "AuthorizerId": {
+          "Ref": "HttpApiAuthorizerCognitoAuthorizer"
+        }
+      },
+      "DependsOn": "HttpApiIntegrationAddFavorite"
+    },
+    "RemoveFavoriteLambdaPermissionHttpApi": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "RemoveFavoriteLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "HttpApi"
+              },
+              "/*"
+            ]
+          ]
+        }
+      }
+    },
+    "HttpApiIntegrationRemoveFavorite": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::GetAtt": [
+            "RemoveFavoriteLambdaFunction",
+            "Arn"
+          ]
+        },
+        "PayloadFormatVersion": "2.0",
+        "TimeoutInMillis": 30000
+      }
+    },
+    "HttpApiRouteDeleteFavoritesProductidVar": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "RouteKey": "DELETE /favorites/{productId}",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "HttpApiIntegrationRemoveFavorite"
+              }
+            ]
+          ]
+        },
+        "AuthorizationType": "JWT",
+        "AuthorizerId": {
+          "Ref": "HttpApiAuthorizerCognitoAuthorizer"
+        }
+      },
+      "DependsOn": "HttpApiIntegrationRemoveFavorite"
+    }
+  },
+  "Outputs": {
+    "ServerlessDeploymentBucketName": {
+      "Value": "serverless-framework-deployments-us-east-1-11f73fcd-160a",
+      "Export": {
+        "Name": "sls-ecommerce-muebles-ar-backend-dev-ServerlessDeploymentBucketName"
+      }
+    },
+    "GetCategoriesLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "GetCategoriesLambdaVersionvYqLwEkIzyrHZEjoIJ9Mip5T1icIeWrZcEsfipFMNqQ"
+      },
+      "Export": {
+        "Name": "sls-ecommerce-muebles-ar-backend-dev-GetCategoriesLambdaFunctionQualifiedArn"
+      }
+    },
+    "GetProductsLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "GetProductsLambdaVersion0AN3Xq7mLIQPsNB1AonjD6w6HDmG6vvaOIHdujlDqI"
+      },
+      "Export": {
+        "Name": "sls-ecommerce-muebles-ar-backend-dev-GetProductsLambdaFunctionQualifiedArn"
+      }
+    },
+    "GetProductByIdLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "GetProductByIdLambdaVersionfI9y2YrYQQBq2dD6A2vwozbl6TcDmZzmW80IPuIpWo"
+      },
+      "Export": {
+        "Name": "sls-ecommerce-muebles-ar-backend-dev-GetProductByIdLambdaFunctionQualifiedArn"
+      }
+    },
+    "WhoamiLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "WhoamiLambdaVersioneCDmFMK5LmOchVdR29o0m9GFdL5akoxJB9fkDrq4"
+      },
+      "Export": {
+        "Name": "sls-ecommerce-muebles-ar-backend-dev-WhoamiLambdaFunctionQualifiedArn"
+      }
+    },
+    "GetFavoritesLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "GetFavoritesLambdaVersionRxJESQkjV4Hryfnzrj1TkVR3RV6tPlIruZnDjoesn8"
+      },
+      "Export": {
+        "Name": "sls-ecommerce-muebles-ar-backend-dev-GetFavoritesLambdaFunctionQualifiedArn"
+      }
+    },
+    "AddFavoriteLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "AddFavoriteLambdaVersionR7qMaRi9aJh5zcacVuIIslauiRuClMOhE23gLg"
+      },
+      "Export": {
+        "Name": "sls-ecommerce-muebles-ar-backend-dev-AddFavoriteLambdaFunctionQualifiedArn"
+      }
+    },
+    "RemoveFavoriteLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "RemoveFavoriteLambdaVersion5aC95myawAKLzC5RkUfthPxmmovJURTjpROsscm6M"
+      },
+      "Export": {
+        "Name": "sls-ecommerce-muebles-ar-backend-dev-RemoveFavoriteLambdaFunctionQualifiedArn"
+      }
+    },
+    "HttpApiId": {
+      "Description": "Id of the HTTP API",
+      "Value": {
+        "Ref": "HttpApi"
+      },
+      "Export": {
+        "Name": "sls-ecommerce-muebles-ar-backend-dev-HttpApiId"
+      }
+    },
+    "HttpApiUrl": {
+      "Description": "URL of the HTTP API",
+      "Value": {
+        "Fn::Join": [
+          "",
+          [
+            "https://",
+            {
+              "Ref": "HttpApi"
+            },
+            ".execute-api.",
+            {
+              "Ref": "AWS::Region"
+            },
+            ".",
+            {
+              "Ref": "AWS::URLSuffix"
+            }
+          ]
+        ]
+      },
+      "Export": {
+        "Name": "sls-ecommerce-muebles-ar-backend-dev-HttpApiUrl"
+      }
+    }
+  }
+}
