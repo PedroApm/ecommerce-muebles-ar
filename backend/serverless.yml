@@ -8,7 +8,17 @@ provider:
   region: us-east-1
   environment:
     DATABASE_URL: ${env:DATABASE_URL}
+    COGNITO_USER_POOL_ID: ${env:COGNITO_USER_POOL_ID}
+    COGNITO_REGION: ${env:COGNITO_REGION}
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - cognito-idp:AdminAddUserToGroup
+          Resource: arn:aws:cognito-idp:us-east-1:${aws:accountId}:userpool/${env:COGNITO_USER_POOL_ID}
   httpApi:
+    cors: true
     authorizers:
       cognitoAuthorizer:
         type: jwt
@@ -74,6 +84,87 @@ functions:
     events:
       - httpApi:
           path: /favorites/{productId}
+          method: DELETE
+          authorizer:
+            name: cognitoAuthorizer
+
+  syncUser:
+    handler: src/auth/syncUser.handler
+    events:
+      - httpApi:
+          path: /auth/sync
+          method: POST
+          authorizer:
+            name: cognitoAuthorizer
+
+  getCart:
+    handler: src/cart/getCart.handler
+    events:
+      - httpApi:
+          path: /cart
+          method: GET
+          authorizer:
+            name: cognitoAuthorizer
+
+  addToCart:
+    handler: src/cart/addToCart.handler
+    events:
+      - httpApi:
+          path: /cart
+          method: POST
+          authorizer:
+            name: cognitoAuthorizer
+
+  updateCartItem:
+    handler: src/cart/updateCartItem.handler
+    events:
+      - httpApi:
+          path: /cart/{itemId}
+          method: PUT
+          authorizer:
+            name: cognitoAuthorizer
+
+  removeFromCart:
+    handler: src/cart/removeFromCart.handler
+    events:
+      - httpApi:
+          path: /cart/{itemId}
+          method: DELETE
+          authorizer:
+            name: cognitoAuthorizer
+
+  checkout:
+    handler: src/cart/checkout.handler
+    events:
+      - httpApi:
+          path: /checkout
+          method: POST
+          authorizer:
+            name: cognitoAuthorizer
+
+  createProduct:
+    handler: src/admin/products/createProduct.handler
+    events:
+      - httpApi:
+          path: /admin/products
+          method: POST
+          authorizer:
+            name: cognitoAuthorizer
+
+  updateProduct:
+    handler: src/admin/products/updateProduct.handler
+    events:
+      - httpApi:
+          path: /admin/products/{id}
+          method: PUT
+          authorizer:
+            name: cognitoAuthorizer
+
+  deleteProduct:
+    handler: src/admin/products/deleteProduct.handler
+    events:
+      - httpApi:
+          path: /admin/products/{id}
           method: DELETE
           authorizer:
             name: cognitoAuthorizer

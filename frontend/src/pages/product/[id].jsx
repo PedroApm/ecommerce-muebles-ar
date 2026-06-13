@@ -1,0 +1,443 @@
+import { useEffect, useState } from 'react';
+import Head from 'next/head';
+import Script from 'next/script';
+import { useRouter } from 'next/router';
+import Layout from '@/components/layout/Layout';
+import { apiFetch } from '@/lib/apiClient';
+import { useAuth } from '@/modules/auth/AuthContext';
+
+function formatPrice(price) {
+  return `S/ ${Number(price).toLocaleString('es-PE', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  })}`;
+}
+
+function variantLabel(v) {
+  const parts = [v.color, v.size, v.material].filter(Boolean).join(' / ');
+  if (!v.price_modifier || v.price_modifier === 0) return parts;
+  const sign = v.price_modifier > 0 ? '+' : '';
+  return `${parts} (${sign}${formatPrice(v.price_modifier)})`;
+}
+
+/* ── Styles ── */
+const pageGridStyle = {
+  display: 'flex',
+  flexWrap: 'wrap',
+  gap: '48px',
+  alignItems: 'flex-start',
+};
+
+const galleryStyle = {
+  flex: '1 1 340px',
+  minWidth: 0,
+};
+
+const mainImageWrapStyle = {
+  width: '100%',
+  aspectRatio: '4 / 3',
+  backgroundColor: 'var(--color-surface-container)',
+  borderRadius: 'var(--radius-lg)',
+  overflow: 'hidden',
+  marginBottom: '12px',
+};
+
+const mainImageStyle = {
+  width: '100%',
+  height: '100%',
+  objectFit: 'cover',
+  display: 'block',
+};
+
+const placeholderStyle = {
+  width: '100%',
+  height: '100%',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  fontSize: '64px',
+};
+
+const thumbnailsStyle = {
+  display: 'flex',
+  gap: '8px',
+  flexWrap: 'wrap',
+};
+
+const thumbBtnStyle = {
+  width: '72px',
+  height: '72px',
+  padding: 0,
+  border: 'none',
+  borderRadius: 'var(--radius)',
+  overflow: 'hidden',
+  cursor: 'pointer',
+  backgroundColor: 'transparent',
+  outlineOffset: '2px',
+};
+
+const thumbImgStyle = {
+  width: '100%',
+  height: '100%',
+  objectFit: 'cover',
+  display: 'block',
+};
+
+const infoStyle = {
+  flex: '1 1 320px',
+  minWidth: 0,
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '0',
+};
+
+const categoryLabelStyle = {
+  fontSize: 'var(--text-label-sm-size)',
+  fontWeight: 'var(--text-label-sm-weight)',
+  letterSpacing: 'var(--text-label-sm-tracking)',
+  textTransform: 'uppercase',
+  color: 'var(--color-secondary)',
+  marginBottom: '6px',
+};
+
+const titleStyle = {
+  fontFamily: 'var(--font-display)',
+  fontSize: '28px',
+  fontWeight: '600',
+  color: 'var(--color-on-surface)',
+  lineHeight: '1.2',
+  marginBottom: '10px',
+};
+
+const priceStyle = {
+  fontSize: '24px',
+  fontWeight: '700',
+  color: 'var(--color-primary)',
+  marginBottom: '16px',
+};
+
+const descriptionStyle = {
+  fontSize: '15px',
+  lineHeight: '1.6',
+  color: 'var(--color-on-surface-variant)',
+  marginBottom: '20px',
+};
+
+const metaRowStyle = {
+  display: 'flex',
+  gap: '12px',
+  fontSize: '14px',
+  color: 'var(--color-on-surface)',
+  marginBottom: '8px',
+};
+
+const metaLabelStyle = {
+  fontWeight: '600',
+  minWidth: '100px',
+  color: 'var(--color-on-surface-variant)',
+};
+
+const dividerStyle = {
+  borderTop: '1px solid var(--color-outline-variant)',
+  margin: '20px 0',
+};
+
+const sectionLabelStyle = {
+  fontSize: '13px',
+  fontWeight: '600',
+  letterSpacing: '0.05em',
+  textTransform: 'uppercase',
+  color: 'var(--color-on-surface-variant)',
+  marginBottom: '10px',
+};
+
+const variantsWrapStyle = {
+  display: 'flex',
+  flexWrap: 'wrap',
+  gap: '8px',
+};
+
+const feedbackStyle = (isError) => ({
+  fontSize: '14px',
+  padding: '10px 14px',
+  borderRadius: 'var(--radius)',
+  marginTop: '10px',
+  backgroundColor: isError ? 'var(--color-error-container)' : 'var(--color-secondary-container)',
+  color: isError ? 'var(--color-on-error-container)' : 'var(--color-on-secondary-container)',
+});
+
+const arSectionStyle = {
+  marginTop: '28px',
+  paddingTop: '24px',
+  borderTop: '1px solid var(--color-outline-variant)',
+};
+
+const centeredStyle = {
+  textAlign: 'center',
+  padding: '80px 0',
+  color: 'var(--color-on-surface-variant)',
+};
+
+const errorTextStyle = {
+  ...centeredStyle,
+  color: 'var(--color-error)',
+};
+
+/* ── Component ── */
+export default function ProductDetailPage() {
+  const router = useRouter();
+  const { id } = router.query;
+  const { user } = useAuth();
+
+  const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+  const [activeImage, setActiveImage] = useState(null);
+  const [selectedVariantId, setSelectedVariantId] = useState(null);
+  const [quantity, setQuantity] = useState(1);
+  const [cartMessage, setCartMessage] = useState('');
+  const [cartError, setCartError] = useState('');
+
+  useEffect(() => {
+    if (!id) return;
+    setLoading(true);
+    setError('');
+    apiFetch(`/products/${id}`)
+      .then((data) => {
+        setProduct(data);
+        const primary =
+          data.images?.find((img) => img.is_primary) || data.images?.[0];
+        setActiveImage(primary?.url || null);
+      })
+      .catch((err) => setError(err.message || 'No se pudo cargar el producto.'))
+      .finally(() => setLoading(false));
+  }, [id]);
+
+  async function handleAddToCart() {
+    if (!user) {
+      router.push('/auth/login');
+      return;
+    }
+    setCartMessage('');
+    setCartError('');
+    try {
+      await apiFetch('/cart', {
+        method: 'POST',
+        body: JSON.stringify({
+          product_id: id,
+          variant_id: selectedVariantId || null,
+          quantity,
+        }),
+      });
+      setCartMessage('Agregado al carrito');
+      setTimeout(() => setCartMessage(''), 2000);
+    } catch (err) {
+      setCartError(err.message || 'Error al agregar al carrito.');
+    }
+  }
+
+  if (loading) {
+    return (
+      <Layout>
+        <p style={centeredStyle}>Cargando producto...</p>
+      </Layout>
+    );
+  }
+
+  if (error || !product) {
+    return (
+      <Layout>
+        <p style={errorTextStyle}>{error || 'Producto no encontrado.'}</p>
+      </Layout>
+    );
+  }
+
+  const {
+    name, description, price, category_name,
+    width, height, depth, materials, style: productStyle,
+    stock, has_ar_model, model_url,
+    images = [], variants = [],
+  } = product;
+
+  return (
+    <>
+      <Head>
+        <title>{name} — Muebles &amp; Deco</title>
+        <meta name="description" content={description || name} />
+      </Head>
+      <Layout>
+        <div style={pageGridStyle}>
+          {/* ── Galería de imágenes ── */}
+          <div style={galleryStyle}>
+            <div style={mainImageWrapStyle}>
+              {activeImage ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={activeImage} alt={name} style={mainImageStyle} />
+              ) : (
+                <div style={placeholderStyle}>🛋</div>
+              )}
+            </div>
+            {images.length > 1 && (
+              <div style={thumbnailsStyle}>
+                {images.map((img) => (
+                  <button
+                    key={img.id}
+                    onClick={() => setActiveImage(img.url)}
+                    style={{
+                      ...thumbBtnStyle,
+                      outline:
+                        activeImage === img.url
+                          ? '2px solid var(--color-primary)'
+                          : '2px solid transparent',
+                    }}
+                  >
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={img.url} alt="" style={thumbImgStyle} />
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* ── Información del producto ── */}
+          <div style={infoStyle}>
+            <p style={categoryLabelStyle}>{category_name}</p>
+            <h1 style={titleStyle}>{name}</h1>
+            <p style={priceStyle}>{formatPrice(price)}</p>
+
+            {description && <p style={descriptionStyle}>{description}</p>}
+
+            <hr style={dividerStyle} />
+
+            {(width || height || depth) && (
+              <div style={metaRowStyle}>
+                <span style={metaLabelStyle}>Medidas</span>
+                <span>{width} × {height} × {depth} cm</span>
+              </div>
+            )}
+            {materials && (
+              <div style={metaRowStyle}>
+                <span style={metaLabelStyle}>Materiales</span>
+                <span>{materials}</span>
+              </div>
+            )}
+            {productStyle && (
+              <div style={metaRowStyle}>
+                <span style={metaLabelStyle}>Estilo</span>
+                <span>{productStyle}</span>
+              </div>
+            )}
+            <div style={metaRowStyle}>
+              <span style={metaLabelStyle}>Disponibilidad</span>
+              <span
+                style={{
+                  color:
+                    stock > 0
+                      ? 'var(--color-secondary)'
+                      : 'var(--color-error)',
+                  fontWeight: '600',
+                }}
+              >
+                {stock > 0 ? `Disponible (${stock} en stock)` : 'Agotado'}
+              </span>
+            </div>
+
+            {/* ── Variantes ── */}
+            {variants.length > 0 && (
+              <>
+                <hr style={dividerStyle} />
+                <p style={sectionLabelStyle}>Variantes</p>
+                <div style={variantsWrapStyle}>
+                  {variants.map((v) => (
+                    <button
+                      key={v.id}
+                      className={
+                        selectedVariantId === v.id
+                          ? 'btn btn-primary'
+                          : 'btn btn-secondary'
+                      }
+                      onClick={() => setSelectedVariantId(v.id)}
+                      style={{ fontSize: '13px', padding: '8px 14px' }}
+                    >
+                      {variantLabel(v)}
+                    </button>
+                  ))}
+                </div>
+              </>
+            )}
+
+            {/* ── Cantidad y carrito ── */}
+            <hr style={dividerStyle} />
+            <p style={sectionLabelStyle}>Cantidad</p>
+            <input
+              className="form-input"
+              type="number"
+              min={1}
+              value={quantity}
+              onChange={(e) =>
+                setQuantity(Math.max(1, parseInt(e.target.value) || 1))
+              }
+              style={{ width: '100px', marginBottom: '16px' }}
+            />
+            <button
+              className="btn btn-primary"
+              onClick={handleAddToCart}
+              disabled={stock === 0}
+              style={{ width: '100%' }}
+            >
+              {stock === 0 ? 'Sin stock' : 'Agregar al carrito'}
+            </button>
+            {cartMessage && (
+              <p style={feedbackStyle(false)}>{cartMessage}</p>
+            )}
+            {cartError && (
+              <p style={feedbackStyle(true)}>{cartError}</p>
+            )}
+
+            {/* ── Realidad Aumentada ── */}
+            <div style={arSectionStyle}>
+              <p style={sectionLabelStyle}>Realidad Aumentada</p>
+              {has_ar_model && model_url ? (
+                <>
+                  <Script
+                    src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"
+                    type="module"
+                    strategy="lazyOnload"
+                  />
+                  {/* model-viewer es un custom element; se pasan atributos booleanos con spread */}
+                  <model-viewer
+                    src={model_url}
+                    style={{
+                      width: '100%',
+                      height: '360px',
+                      borderRadius: 'var(--radius-lg)',
+                      backgroundColor: 'var(--color-surface-container)',
+                    }}
+                    {...{ ar: '', 'camera-controls': '', 'auto-rotate': '' }}
+                  >
+                    <button
+                      slot="ar-button"
+                      className="btn btn-primary"
+                      style={{
+                        position: 'absolute',
+                        bottom: '16px',
+                        left: '50%',
+                        transform: 'translateX(-50%)',
+                      }}
+                    >
+                      Ver en mi espacio
+                    </button>
+                  </model-viewer>
+                </>
+              ) : (
+                <p style={{ color: 'var(--color-on-surface-variant)', fontSize: '14px' }}>
+                  Visualización 3D no disponible para este producto.
+                </p>
+              )}
+            </div>
+          </div>
+        </div>
+      </Layout>
+    </>
+  );
+}

@@ -8,4 +8,8 @@ async function getUserIdBySub(cognitoSub) {
   return result.rows.length > 0 ? result.rows[0].id : null;
 }
 
-module.exports = { getUserIdBySub };
+function isAdmin(claims) {
+  return String(claims['cognito:groups'] || '').includes('admin');
+}
+
+module.exports = { getUserIdBySub, isAdmin };
