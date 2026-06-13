@@ -287,7 +287,7 @@ export default function CartPage() {
   return (
     <>
       <Head>
-        <title>Carrito — Muebles &amp; Deco</title>
+        <title>Carrito — VESTAR</title>
       </Head>
       <Layout>
         <h1 className="page-heading">Tu carrito</h1>

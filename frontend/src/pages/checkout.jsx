@@ -200,7 +200,7 @@ export default function CheckoutPage() {
     return (
       <Layout>
         <Head>
-          <title>Pedido confirmado — Muebles &amp; Deco</title>
+          <title>Pedido confirmado — VESTAR</title>
         </Head>
         <div style={successCardStyle}>
           <p style={successTitleStyle}>¡Pedido confirmado!</p>
@@ -220,7 +220,7 @@ export default function CheckoutPage() {
   return (
     <>
       <Head>
-        <title>Checkout — Muebles &amp; Deco</title>
+        <title>Checkout — VESTAR</title>
       </Head>
       <Layout>
         <h1 className="page-heading">Confirmar pedido</h1>

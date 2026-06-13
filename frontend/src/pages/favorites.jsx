@@ -135,7 +135,7 @@ export default function FavoritesPage() {
   return (
     <>
       <Head>
-        <title>Favoritos — Muebles &amp; Deco</title>
+        <title>Favoritos — VESTAR</title>
       </Head>
       <Layout>
         <h1 className="page-heading">Mis favoritos</h1>
@@ -148,16 +148,18 @@ export default function FavoritesPage() {
             </Link>
           </div>
         ) : (
-          <div style={gridStyle}>
+          <div style={gridStyle} className="favorites-grid">
             {favorites.map((fav) => (
-              <div key={fav.favorite_id} className="card" style={{ display: 'flex', flexDirection: 'column' }}>
+              <div key={fav.favorite_id} className="card" style={{ display: 'flex', flexDirection: 'column', position: 'relative' }}>
                 <Link href={`/product/${fav.id}`} style={cardLinkStyle}>
-                  <div style={imageWrapStyle}>
+                  <div style={imageWrapStyle} className="fav-card-img-wrap">
                     {fav.image_url ? (
                       // eslint-disable-next-line @next/next/no-img-element
-                      <img src={fav.image_url} alt={fav.name} style={imgStyle} />
+                      <img src={fav.image_url} alt={fav.name} className="card-img" />
                     ) : (
-                      <div style={placeholderStyle}>🛋</div>
+                      <div style={placeholderStyle}>
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" opacity="0.4"><path d="M20 9V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v3"/><path d="M2 11v5a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-5a2 2 0 0 0-4 0v2H6v-2a2 2 0 0 0-4 0Z"/><path d="M4 18v2"/><path d="M20 18v2"/><path d="M12 4v9"/></svg>
+                      </div>
                     )}
                   </div>
                   <div style={infoStyle}>
@@ -168,16 +170,34 @@ export default function FavoritesPage() {
                     </div>
                   </div>
                 </Link>
-                <div style={{ padding: '0 16px 16px' }}>
-                  <button
-                    className="btn btn-secondary"
-                    onClick={(e) => handleRemove(e, fav.id)}
-                    disabled={removingId === fav.id}
-                    style={{ width: '100%', fontSize: '13px', padding: '7px 12px' }}
-                  >
-                    {removingId === fav.id ? 'Quitando...' : 'Quitar de favoritos'}
-                  </button>
-                </div>
+                {/* Heart remove button — top-right overlay */}
+                <button
+                  onClick={(e) => handleRemove(e, fav.id)}
+                  disabled={removingId === fav.id}
+                  style={{
+                    position: 'absolute',
+                    top: '12px',
+                    right: '12px',
+                    width: '36px',
+                    height: '36px',
+                    borderRadius: '50%',
+                    border: 'none',
+                    backgroundColor: 'rgba(251,249,244,0.88)',
+                    backdropFilter: 'blur(6px)',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: removingId === fav.id ? 'var(--color-outline)' : 'var(--color-primary)',
+                    transition: 'background-color 150ms ease',
+                    flexShrink: 0,
+                  }}
+                  aria-label="Quitar de favoritos"
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                  </svg>
+                </button>
               </div>
             ))}
           </div>

@@ -259,6 +259,7 @@ video {
   top: 64px;
   left: 0;
   right: 0;
+  min-height: calc(100vh - 64px);
   background-color: var(--color-surface-container-lowest);
   border-bottom: 1px solid var(--color-outline-variant);
   padding: 20px var(--space-margin-mobile) 24px;
@@ -266,6 +267,7 @@ video {
   flex-direction: column;
   gap: 16px;
   z-index: 99;
+  overflow-y: auto;
   box-shadow: 0 8px 24px rgba(27, 28, 25, 0.06);
 }
 
@@ -339,3 +341,300 @@ video {
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
+
+/* ─────────────────────────────────────────
+   VESTAR Mobile Design System
+───────────────────────────────────────── */
+
+/* ── Bottom Navigation Bar ── */
+.bottom-nav {
+  display: none;
+}
+
+@media (max-width: 640px) {
+  .bottom-nav {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    justify-content: space-around;
+    align-items: stretch;
+    background-color: var(--color-surface-container-lowest);
+    border-top: 1px solid var(--color-outline-variant);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    z-index: 100;
+  }
+
+  /* Extra padding so content doesn't hide behind bottom nav */
+  .main-with-bottom-nav {
+    padding-bottom: 88px !important;
+  }
+}
+
+.bottom-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  padding: 10px 0;
+  flex: 1;
+  color: var(--color-on-surface-variant);
+  font-family: var(--font-base);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: color var(--transition-base);
+}
+
+.bottom-nav-item.active {
+  color: var(--color-primary);
+}
+
+/* ── Auth tab switcher ── */
+.auth-tabs {
+  display: flex;
+  background-color: var(--color-surface-container-low);
+  border: 1.5px solid var(--color-outline-variant);
+  border-radius: var(--radius-full);
+  padding: 3px;
+  margin-bottom: 28px;
+}
+
+.auth-tab {
+  flex: 1;
+  text-align: center;
+  padding: 10px 16px;
+  border-radius: var(--radius-full);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  cursor: pointer;
+  text-decoration: none;
+  color: var(--color-on-surface-variant);
+  transition: background-color var(--transition-base), color var(--transition-base), box-shadow var(--transition-base);
+}
+
+.auth-tab.active {
+  background-color: var(--color-surface-container-lowest);
+  color: var(--color-on-surface);
+  box-shadow: 0 1px 6px rgba(27, 28, 25, 0.1);
+}
+
+/* ── Auth input (softer, no visible border at rest) ── */
+.auth-input {
+  width: 100%;
+  padding: 14px 16px;
+  background-color: var(--color-surface-container-low);
+  color: var(--color-on-surface);
+  border: 1.5px solid transparent;
+  border-radius: var(--radius);
+  font-family: var(--font-base);
+  font-size: var(--text-body-md-size);
+  transition: border-color var(--transition-base), background-color var(--transition-base), box-shadow var(--transition-base);
+  outline: none;
+}
+
+.auth-input:focus {
+  border-color: var(--color-primary);
+  background-color: var(--color-surface-container-lowest);
+  box-shadow: 0 0 0 3px var(--color-primary-fixed);
+}
+
+.auth-input::placeholder {
+  color: var(--color-on-surface-variant);
+  opacity: 0.45;
+}
+
+/* ── Auth OR divider ── */
+.auth-or {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 24px 0;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-on-surface-variant);
+}
+
+.auth-or::before,
+.auth-or::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background-color: var(--color-outline-variant);
+}
+
+/* ── Favorites: single-column full-width on mobile ── */
+@media (max-width: 640px) {
+  .favorites-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .fav-card-img-wrap {
+    aspect-ratio: 4 / 3 !important;
+  }
+}
+
+/* ── Product detail: AR overlay button (glassmorphic pill) ── */
+.ar-overlay-btn {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 10px 18px;
+  background-color: rgba(251, 249, 244, 0.82);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  border-radius: var(--radius-full);
+  font-family: var(--font-base);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--color-on-surface);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color var(--transition-base);
+  z-index: 2;
+}
+
+.ar-overlay-btn:hover {
+  background-color: rgba(251, 249, 244, 0.96);
+}
+
+/* ── Product detail: sticky add-to-cart on mobile ── */
+@media (max-width: 640px) {
+  .add-to-cart-wrap {
+    position: fixed;
+    bottom: 60px; /* sits above bottom-nav */
+    left: 0;
+    right: 0;
+    padding: 12px var(--space-margin-mobile);
+    background-color: var(--color-surface-container-lowest);
+    border-top: 1px solid var(--color-outline-variant);
+    z-index: 90;
+  }
+
+  /* Pull the desktop-only quantity section above cart wrap */
+  .qty-section-desktop {
+    display: none;
+  }
+}
+
+@media (min-width: 641px) {
+  .add-to-cart-wrap {
+    /* No special treatment on desktop */
+  }
+  .qty-section-desktop {
+    display: block;
+  }
+}
+
+/* ── VESTAR logo mark ── */
+.vestar-logo {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 20px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+  text-decoration: none;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+/* ── Catalog: category badge on product ── */
+.product-category-badge {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-secondary);
+}
+
+/* ── Mobile header: hide desktop nav, show centered logo ── */
+@media (max-width: 640px) {
+  .header-inner-desktop {
+    display: none;
+  }
+}
+
+/* ── Fav button: show icon-only on narrow mobile ── */
+.fav-btn-mobile-icon { display: none; }
+
+@media (max-width: 519px) {
+  .fav-btn-mobile-icon {
+    display: inline;
+    font-size: 13px;
+  }
+  .fav-btn-desktop-text { display: none; }
+  .fav-btn {
+    padding: 4px 8px;
+    min-width: 32px;
+  }
+}
+
+/* ── Category filter row: horizontal scroll on mobile ── */
+.category-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 32px;
+}
+
+@media (max-width: 640px) {
+  .category-filters {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 8px;
+    scrollbar-width: thin;
+  }
+
+  .section-heading {
+    font-size: 18px;
+  }
+}
+
+/* ── Sticky search + filter bar ── */
+.sticky-filters-bar {
+  position: sticky;
+  top: 64px;
+  z-index: 50;
+  background-color: var(--color-background);
+  padding: 12px 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  margin-bottom: 32px;
+}
+
+/* ── Más vistos: horizontal carousel ── */
+.carousel-wrap {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  gap: 16px;
+  padding-bottom: 8px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.carousel-item {
+  flex: 0 0 240px;
+  scroll-snap-align: start;
+}
+
+@media (max-width: 640px) {
+  .carousel-item {
+    flex: 0 0 200px;
+  }
+}
+

@@ -85,7 +85,7 @@ export default function ProfilePage() {
   return (
     <>
       <Head>
-        <title>Mi perfil — Muebles &amp; Deco</title>
+        <title>Mi perfil — VESTAR</title>
       </Head>
       <Layout>
         <h1 className="page-heading">Mi perfil</h1>

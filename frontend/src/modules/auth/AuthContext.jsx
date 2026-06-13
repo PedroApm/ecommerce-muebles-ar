@@ -44,9 +44,10 @@ export function AuthProvider({ children }) {
   }, []);
 
   async function login(email, password) {
-    const { idToken, accessToken } = await loginUser(email, password);
+    const { idToken, accessToken, refreshToken } = await loginUser(email, password);
     localStorage.setItem('idToken', idToken);
     localStorage.setItem('accessToken', accessToken);
+    localStorage.setItem('refreshToken', refreshToken);
     setUser(buildUser(decodeJwtPayload(idToken)));
   }
 
@@ -54,6 +55,7 @@ export function AuthProvider({ children }) {
     logoutUser();
     localStorage.removeItem('idToken');
     localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
     setUser(null);
   }
 

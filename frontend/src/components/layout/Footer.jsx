@@ -65,7 +65,7 @@ export default function Footer() {
       <div className="container">
         <div style={innerStyle}>
           <div>
-            <span style={logoStyle}>Muebles &amp; Deco</span>
+            <span style={logoStyle}>VESTAR</span>
             <p style={taglineStyle}>
               Elegancia y confort<br />para tu hogar.
             </p>
@@ -88,8 +88,8 @@ export default function Footer() {
         </div>
 
         <div style={bottomStyle}>
-          <span>Proyecto académico &copy; {new Date().getFullYear()}</span>
-          <span>Hecho con Next.js &amp; AWS</span>
+          <span>VESTAR &copy; {new Date().getFullYear()}</span>
+          <span>Diseño y tecnología</span>
         </div>
       </div>
     </footer>

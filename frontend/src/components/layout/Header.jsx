@@ -19,15 +19,6 @@ const innerStyle = {
   gap: '24px',
 };
 
-const logoStyle = {
-  fontFamily: 'var(--font-display)',
-  fontWeight: '600',
-  fontSize: '18px',
-  color: 'var(--color-primary)',
-  textDecoration: 'none',
-  whiteSpace: 'nowrap',
-  flexShrink: 0,
-};
 
 const navStyle = {
   display: 'flex',
@@ -75,8 +66,8 @@ export default function Header() {
   return (
     <header style={headerStyle}>
       <div className="container" style={innerStyle}>
-        <Link href="/" style={logoStyle}>
-          Muebles &amp; Deco
+        <Link href="/" className="vestar-logo">
+          VESTAR
         </Link>
 
         {/* Desktop nav */}
@@ -149,37 +140,38 @@ export default function Header() {
           <Link href="/" className="nav-link" style={{ fontSize: '16px' }}>Catálogo</Link>
           <Link href="/favorites" className="nav-link" style={{ fontSize: '16px' }}>Favoritos</Link>
           <Link href="/cart" className="nav-link" style={{ fontSize: '16px' }}>Carrito</Link>
-
-          <div style={{ height: '1px', backgroundColor: 'var(--color-outline-variant)' }} />
-
-          {!mounted || loading ? null : user ? (
-            <>
-              {user.groups?.includes('admin') && (
-                <Link href="/admin" className="nav-link" style={{ fontSize: '16px', color: 'var(--color-secondary)', fontWeight: '600' }}>
-                  Admin
-                </Link>
-              )}
-              <Link href="/profile" className="nav-link" style={{ fontSize: '16px' }}>Mi perfil</Link>
-              <button
-                className="btn btn-secondary"
-                onClick={handleLogout}
-                style={{ width: '100%', fontSize: '14px' }}
-              >
-                Cerrar sesión
-              </button>
-            </>
-          ) : (
-            <>
-              <Link href="/auth/login" className="nav-link" style={{ fontSize: '16px' }}>Iniciar sesión</Link>
-              <Link
-                href="/auth/register"
-                className="btn btn-primary"
-                style={{ width: '100%', textAlign: 'center', fontSize: '14px' }}
-              >
-                Registrarse
-              </Link>
-            </>
+          {!mounted || loading ? null : user?.groups?.includes('admin') && (
+            <Link href="/admin" className="nav-link" style={{ fontSize: '16px', color: 'var(--color-secondary)', fontWeight: '600' }}>
+              Admin
+            </Link>
           )}
+
+          {/* Auth footer: pushed to bottom with margin-top: auto */}
+          <div style={{ borderTop: '1px solid var(--color-outline-variant)', marginTop: 'auto', paddingTop: '16px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            {!mounted || loading ? null : user ? (
+              <>
+                <Link href="/profile" className="nav-link" style={{ fontSize: '16px' }}>Mi perfil</Link>
+                <button
+                  className="btn btn-secondary"
+                  onClick={handleLogout}
+                  style={{ width: '100%', fontSize: '14px' }}
+                >
+                  Cerrar sesión
+                </button>
+              </>
+            ) : (
+              <>
+                <Link href="/auth/login" className="nav-link" style={{ fontSize: '16px' }}>Iniciar sesión</Link>
+                <Link
+                  href="/auth/register"
+                  className="btn btn-primary"
+                  style={{ width: '100%', textAlign: 'center', fontSize: '14px' }}
+                >
+                  Registrarse
+                </Link>
+              </>
+            )}
+          </div>
         </div>
       )}
     </header>

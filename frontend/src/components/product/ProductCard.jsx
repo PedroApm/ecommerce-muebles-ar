@@ -131,7 +131,8 @@ export default function ProductCard({ product }) {
           <span style={priceStyle}>{formatPrice(product.price)}</span>
           {user && (
             <button style={favBtnBaseStyle} className="fav-btn" onClick={handleFavorite}>
-              {favLabel}
+              <span className="fav-btn-mobile-icon">♥</span>
+              <span className="fav-btn-desktop-text">{favLabel}</span>
             </button>
           )}
         </div>

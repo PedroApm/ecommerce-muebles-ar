@@ -71,7 +71,7 @@ export default function AdminProductsPage() {
   return (
     <>
       <Head>
-        <title>Administración de Productos — Muebles &amp; Deco</title>
+        <title>Administración de Productos — VESTAR</title>
       </Head>
       <AdminGuard>
         <Layout>

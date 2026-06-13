@@ -5,7 +5,7 @@ import {
   CognitoUserAttribute,
 } from 'amazon-cognito-identity-js';
 
-const userPool = new CognitoUserPool({
+export const userPool = new CognitoUserPool({
   UserPoolId: process.env.NEXT_PUBLIC_COGNITO_USER_POOL_ID,
   ClientId: process.env.NEXT_PUBLIC_COGNITO_CLIENT_ID,
 });
@@ -43,6 +43,7 @@ export function loginUser(email, password) {
         resolve({
           idToken: result.getIdToken().getJwtToken(),
           accessToken: result.getAccessToken().getJwtToken(),
+          refreshToken: result.getRefreshToken().getToken(),
         }),
       onFailure: reject,
     });

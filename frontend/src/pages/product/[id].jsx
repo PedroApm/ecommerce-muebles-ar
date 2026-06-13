@@ -273,19 +273,59 @@ export default function ProductDetailPage() {
   return (
     <>
       <Head>
-        <title>{name} — Muebles &amp; Deco</title>
+        <title>{name} — VESTAR</title>
         <meta name="description" content={description || name} />
       </Head>
       <Layout>
         <div style={pageGridStyle}>
           {/* ── Galería de imágenes ── */}
           <div style={galleryStyle}>
-            <div style={mainImageWrapStyle}>
+            <div style={{ ...mainImageWrapStyle, position: 'relative' }}>
               {activeImage ? (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img src={activeImage} alt={name} style={mainImageStyle} />
+                <img src={activeImage} alt={name} className="card-img" style={{ borderRadius: 'var(--radius-lg)' }} />
               ) : (
-                <div style={placeholderStyle}>🛋</div>
+                <div style={placeholderStyle}>
+                  <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" opacity="0.25"><path d="M20 9V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v3"/><path d="M2 11v5a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-5a2 2 0 0 0-4 0v2H6v-2a2 2 0 0 0-4 0Z"/><path d="M4 18v2"/><path d="M20 18v2"/><path d="M12 4v9"/></svg>
+                </div>
+              )}
+              {/* AR overlay pill — visible when AR model exists */}
+              {has_ar_model && model_url && (
+                <button
+                  className="ar-overlay-btn"
+                  onClick={() => {
+                    document.getElementById('ar-section')?.scrollIntoView({ behavior: 'smooth' });
+                  }}
+                  aria-label="Ver en mi espacio"
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                    <polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/>
+                  </svg>
+                  Ver en mi espacio
+                </button>
+              )}
+              {/* Image dots indicator */}
+              {images.length > 1 && (
+                <div style={{ position: 'absolute', bottom: '12px', left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: '6px' }}>
+                  {images.map((img) => (
+                    <button
+                      key={img.id}
+                      onClick={() => setActiveImage(img.url)}
+                      style={{
+                        width: activeImage === img.url ? '20px' : '6px',
+                        height: '6px',
+                        borderRadius: '3px',
+                        border: 'none',
+                        backgroundColor: activeImage === img.url ? 'var(--color-primary)' : 'rgba(255,255,255,0.7)',
+                        cursor: 'pointer',
+                        padding: 0,
+                        transition: 'all 250ms ease',
+                      }}
+                      aria-label={`Imagen ${img.id}`}
+                    />
+                  ))}
+                </div>
               )}
             </div>
             {images.length > 1 && (
@@ -390,14 +430,16 @@ export default function ProductDetailPage() {
               }
               style={{ width: '100px', marginBottom: '16px' }}
             />
-            <button
-              className="btn btn-primary"
-              onClick={handleAddToCart}
-              disabled={stock === 0}
-              style={{ width: '100%' }}
-            >
-              {stock === 0 ? 'Sin stock' : 'Agregar al carrito'}
-            </button>
+            <div className="add-to-cart-wrap">
+              <button
+                className="btn btn-primary"
+                onClick={handleAddToCart}
+                disabled={stock === 0}
+                style={{ width: '100%' }}
+              >
+                {stock === 0 ? 'Sin stock' : 'Agregar al carrito'}
+              </button>
+            </div>
             {cartMessage && (
               <p style={feedbackStyle(false)}>{cartMessage}</p>
             )}
@@ -406,7 +448,7 @@ export default function ProductDetailPage() {
             )}
 
             {/* ── Realidad Aumentada ── */}
-            <div style={arSectionStyle}>
+            <div id="ar-section" style={arSectionStyle}>
               <p style={sectionLabelStyle}>Realidad Aumentada</p>
               {has_ar_model && model_url ? (
                 <>

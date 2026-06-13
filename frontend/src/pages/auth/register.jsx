@@ -17,6 +17,16 @@ function translateError(err) {
   return COGNITO_ERRORS[err.code] || err.message;
 }
 
+function BagIcon() {
+  return (
+    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ color: 'var(--color-primary)' }}>
+      <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+      <line x1="3" y1="6" x2="21" y2="6" />
+      <path d="M16 10a4 4 0 0 1-8 0" />
+    </svg>
+  );
+}
+
 const pageStyle = {
   minHeight: '100vh',
   display: 'flex',
@@ -24,47 +34,36 @@ const pageStyle = {
   alignItems: 'center',
   justifyContent: 'center',
   backgroundColor: 'var(--color-background)',
-  padding: '24px 20px',
+  padding: '32px 20px',
 };
 
-const titleStyle = {
+const brandWrapStyle = {
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  gap: '8px',
+  marginBottom: '28px',
+};
+
+const brandNameStyle = {
   fontFamily: 'var(--font-display)',
-  fontSize: '22px',
   fontWeight: '600',
-  color: 'var(--color-on-surface)',
-  marginBottom: '6px',
-};
-
-const subtitleStyle = {
-  fontSize: '14px',
-  color: 'var(--color-on-surface-variant)',
-  marginBottom: '24px',
+  fontSize: '18px',
+  letterSpacing: '0.12em',
+  textTransform: 'uppercase',
+  color: 'var(--color-primary)',
 };
 
 const formStyle = {
   display: 'flex',
   flexDirection: 'column',
-  gap: '16px',
+  gap: '18px',
 };
 
 const fieldStyle = {
   display: 'flex',
   flexDirection: 'column',
-  gap: '6px',
-};
-
-const labelStyle = {
-  fontSize: '13px',
-  fontWeight: '600',
-  color: 'var(--color-on-surface)',
-};
-
-const errorStyle = {
-  backgroundColor: 'var(--color-error-container)',
-  color: 'var(--color-on-error-container)',
-  borderRadius: 'var(--radius)',
-  padding: '12px 16px',
-  fontSize: '14px',
+  gap: '8px',
 };
 
 const rowStyle = {
@@ -73,30 +72,12 @@ const rowStyle = {
   gap: '12px',
 };
 
-const footerStyle = {
-  textAlign: 'center',
-  marginTop: '20px',
+const errorStyle = {
+  backgroundColor: 'var(--color-error-container)',
+  color: 'var(--color-on-error-container)',
+  borderRadius: 'var(--radius)',
+  padding: '12px 16px',
   fontSize: '14px',
-  color: 'var(--color-on-surface-variant)',
-};
-
-const linkStyle = {
-  color: 'var(--color-primary)',
-  fontWeight: '600',
-  textDecoration: 'none',
-};
-
-const stepBadgeStyle = {
-  display: 'inline-flex',
-  alignItems: 'center',
-  gap: '8px',
-  fontSize: '12px',
-  fontWeight: '600',
-  color: 'var(--color-secondary)',
-  backgroundColor: 'var(--color-secondary-container)',
-  borderRadius: 'var(--radius-full)',
-  padding: '4px 12px',
-  marginBottom: '16px',
 };
 
 export default function RegisterPage() {
@@ -162,20 +143,29 @@ export default function RegisterPage() {
   if (step === 'confirm') {
     return (
       <div style={pageStyle}>
-        <Link href="/" className="auth-brand">Muebles &amp; Deco</Link>
-        <div className="auth-card">
-          <div style={stepBadgeStyle}>Paso 2 de 2</div>
-          <h1 style={titleStyle}>Verificá tu cuenta</h1>
-          <p style={subtitleStyle}>
-            Enviamos un código a <strong>{email}</strong>.
-          </p>
+        <div style={brandWrapStyle}>
+          <BagIcon />
+          <span style={brandNameStyle}>VESTAR</span>
+        </div>
+        <div className="auth-card" style={{ width: '100%', maxWidth: '420px' }}>
+          <div style={{ textAlign: 'center', marginBottom: '24px' }}>
+            <p style={{ fontSize: '11px', fontWeight: '700', letterSpacing: '0.07em', textTransform: 'uppercase', color: 'var(--color-secondary)', marginBottom: '6px' }}>
+              Paso 2 de 2
+            </p>
+            <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '22px', fontWeight: '600', color: 'var(--color-on-surface)' }}>
+              Verificá tu cuenta
+            </h1>
+            <p style={{ fontSize: '14px', color: 'var(--color-on-surface-variant)', marginTop: '6px' }}>
+              Código enviado a <strong>{email}</strong>
+            </p>
+          </div>
           <form onSubmit={handleConfirm} style={formStyle}>
             {error && <div style={errorStyle}>{error}</div>}
             <div style={fieldStyle}>
-              <label style={labelStyle} htmlFor="code">Código de verificación</label>
+              <label className="field-label" htmlFor="code">Código de verificación</label>
               <input
                 id="code"
-                className="form-input"
+                className="auth-input"
                 type="text"
                 inputMode="numeric"
                 placeholder="123456"
@@ -183,14 +173,14 @@ export default function RegisterPage() {
                 onChange={(e) => setCode(e.target.value)}
                 required
                 autoFocus
-                style={{ letterSpacing: '0.15em', fontSize: '18px', textAlign: 'center' }}
+                style={{ letterSpacing: '0.2em', fontSize: '20px', textAlign: 'center' }}
               />
             </div>
             <button
               className="btn btn-primary"
               type="submit"
               disabled={loading}
-              style={{ width: '100%', marginTop: '4px' }}
+              style={{ width: '100%', letterSpacing: '0.06em' }}
             >
               {loading ? 'Verificando...' : 'Confirmar cuenta'}
             </button>
@@ -202,19 +192,26 @@ export default function RegisterPage() {
 
   return (
     <div style={pageStyle}>
-      <Link href="/" className="auth-brand">Muebles &amp; Deco</Link>
-      <div className="auth-card">
-        <div style={stepBadgeStyle}>Paso 1 de 2</div>
-        <h1 style={titleStyle}>Crear cuenta</h1>
-        <p style={subtitleStyle}>Ingresá tus datos para registrarte.</p>
+      <div style={brandWrapStyle}>
+        <BagIcon />
+        <span style={brandNameStyle}>VESTAR</span>
+      </div>
+
+      <div className="auth-card" style={{ width: '100%', maxWidth: '420px' }}>
+        {/* Tab switcher */}
+        <div className="auth-tabs">
+          <Link href="/auth/login" className="auth-tab">Ingresar</Link>
+          <span className="auth-tab active">Registrarse</span>
+        </div>
+
         <form onSubmit={handleRegister} style={formStyle}>
           {error && <div style={errorStyle}>{error}</div>}
           <div style={rowStyle}>
             <div style={fieldStyle}>
-              <label style={labelStyle} htmlFor="givenName">Nombre</label>
+              <label className="field-label" htmlFor="givenName">Nombre</label>
               <input
                 id="givenName"
-                className="form-input"
+                className="auth-input"
                 type="text"
                 placeholder="Juan"
                 value={form.givenName}
@@ -223,10 +220,10 @@ export default function RegisterPage() {
               />
             </div>
             <div style={fieldStyle}>
-              <label style={labelStyle} htmlFor="familyName">Apellido</label>
+              <label className="field-label" htmlFor="familyName">Apellido</label>
               <input
                 id="familyName"
-                className="form-input"
+                className="auth-input"
                 type="text"
                 placeholder="García"
                 value={form.familyName}
@@ -236,22 +233,22 @@ export default function RegisterPage() {
             </div>
           </div>
           <div style={fieldStyle}>
-            <label style={labelStyle} htmlFor="email">Correo electrónico</label>
+            <label className="field-label" htmlFor="email">Email</label>
             <input
               id="email"
-              className="form-input"
+              className="auth-input"
               type="email"
-              placeholder="juan@ejemplo.com"
+              placeholder="nombre@ejemplo.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
             />
           </div>
           <div style={fieldStyle}>
-            <label style={labelStyle} htmlFor="password">Contraseña</label>
+            <label className="field-label" htmlFor="password">Contraseña</label>
             <input
               id="password"
-              className="form-input"
+              className="auth-input"
               type="password"
               placeholder="Mínimo 8 caracteres"
               value={form.password}
@@ -264,17 +261,11 @@ export default function RegisterPage() {
             className="btn btn-primary"
             type="submit"
             disabled={loading}
-            style={{ width: '100%', marginTop: '4px' }}
+            style={{ width: '100%', letterSpacing: '0.06em' }}
           >
             {loading ? 'Registrando...' : 'Continuar'}
           </button>
         </form>
-        <p style={footerStyle}>
-          ¿Ya tenés cuenta?{' '}
-          <a href="/auth/login" style={linkStyle}>
-            Ingresá aquí
-          </a>
-        </p>
       </div>
     </div>
   );
