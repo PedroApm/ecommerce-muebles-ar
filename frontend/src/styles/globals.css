@@ -638,3 +638,105 @@ video {
   }
 }
 
+/* ── Mobile sidebar drawer ── */
+.header-mobile-greeting {
+  display: none; /* hidden on desktop */
+}
+
+/* Sidebar and overlay: hidden on desktop, shown only on mobile */
+.mobile-sidebar {
+  display: none;
+}
+
+.sidebar-overlay {
+  display: none;
+}
+
+@media (max-width: 640px) {
+  .header-mobile-greeting {
+    display: block;
+    font-size: 13px;
+    color: var(--color-on-surface-variant);
+    flex: 1;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .sidebar-overlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 199;
+  }
+
+  .mobile-sidebar {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: 75%;
+    max-width: 280px;
+    background-color: var(--color-surface);
+    z-index: 200;
+    padding: 16px;
+    transform: translateX(100%);
+    transition: transform 0.25s ease;
+    overflow-y: auto;
+  }
+
+  .mobile-sidebar--open {
+    transform: translateX(0);
+  }
+
+  .sidebar-close-btn {
+    align-self: flex-end;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    color: var(--color-on-surface);
+    border-radius: var(--radius);
+    transition: background-color var(--transition-base);
+    margin-bottom: 8px;
+    flex-shrink: 0;
+  }
+
+  .sidebar-close-btn:hover {
+    background-color: var(--color-surface-container);
+  }
+
+  .sidebar-link {
+    display: block;
+    padding: 12px 8px;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--color-on-surface);
+    text-decoration: none;
+    border-radius: var(--radius);
+    transition: background-color var(--transition-base);
+  }
+
+  .sidebar-link:hover {
+    background-color: var(--color-surface-container);
+  }
+
+  .sidebar-link--admin {
+    color: var(--color-secondary);
+    font-weight: 600;
+  }
+
+  .sidebar-auth-footer {
+    border-top: 1px solid var(--color-outline-variant);
+    margin-top: auto;
+    padding-top: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+}
+

@@ -19,7 +19,6 @@ const innerStyle = {
   gap: '24px',
 };
 
-
 const navStyle = {
   display: 'flex',
   alignItems: 'center',
@@ -66,9 +65,13 @@ export default function Header() {
   return (
     <header style={headerStyle}>
       <div className="container" style={innerStyle}>
-        <Link href="/" className="vestar-logo">
-          VESTAR
-        </Link>
+        {/* Logo – always visible */}
+        <Link href="/" className="vestar-logo">VESTAR</Link>
+
+        {/* Mobile: greeting when logged in (hidden on desktop via CSS) */}
+        {mounted && !loading && user && (
+          <span className="header-mobile-greeting">Hola, {user.given_name}</span>
+        )}
 
         {/* Desktop nav */}
         <nav className="nav-desktop" style={{ flex: 1 }}>
@@ -113,67 +116,85 @@ export default function Header() {
           )}
         </div>
 
-        {/* Mobile hamburger */}
+        {/* Mobile hamburger (hidden on desktop via CSS) */}
         <button
           className="mobile-menu-btn"
-          onClick={() => setMenuOpen((o) => !o)}
-          aria-label={menuOpen ? 'Cerrar menú' : 'Abrir menú'}
+          onClick={() => setMenuOpen(true)}
+          aria-label="Abrir menú"
         >
-          {menuOpen ? (
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <line x1="18" y1="6" x2="6" y2="18" />
-              <line x1="6" y1="6" x2="18" y2="18" />
-            </svg>
-          ) : (
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <line x1="3" y1="12" x2="21" y2="12" />
-              <line x1="3" y1="6" x2="21" y2="6" />
-              <line x1="3" y1="18" x2="21" y2="18" />
-            </svg>
-          )}
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="3" y1="12" x2="21" y2="12" />
+            <line x1="3" y1="6" x2="21" y2="6" />
+            <line x1="3" y1="18" x2="21" y2="18" />
+          </svg>
         </button>
       </div>
 
-      {/* Mobile nav overlay */}
+      {/* Mobile backdrop – conditionally rendered */}
       {menuOpen && (
-        <div className="mobile-nav">
-          <Link href="/" className="nav-link" style={{ fontSize: '16px' }}>Catálogo</Link>
-          <Link href="/favorites" className="nav-link" style={{ fontSize: '16px' }}>Favoritos</Link>
-          <Link href="/cart" className="nav-link" style={{ fontSize: '16px' }}>Carrito</Link>
-          {!mounted || loading ? null : user?.groups?.includes('admin') && (
-            <Link href="/admin" className="nav-link" style={{ fontSize: '16px', color: 'var(--color-secondary)', fontWeight: '600' }}>
-              Admin
-            </Link>
-          )}
-
-          {/* Auth footer: pushed to bottom with margin-top: auto */}
-          <div style={{ borderTop: '1px solid var(--color-outline-variant)', marginTop: 'auto', paddingTop: '16px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            {!mounted || loading ? null : user ? (
-              <>
-                <Link href="/profile" className="nav-link" style={{ fontSize: '16px' }}>Mi perfil</Link>
-                <button
-                  className="btn btn-secondary"
-                  onClick={handleLogout}
-                  style={{ width: '100%', fontSize: '14px' }}
-                >
-                  Cerrar sesión
-                </button>
-              </>
-            ) : (
-              <>
-                <Link href="/auth/login" className="nav-link" style={{ fontSize: '16px' }}>Iniciar sesión</Link>
-                <Link
-                  href="/auth/register"
-                  className="btn btn-primary"
-                  style={{ width: '100%', textAlign: 'center', fontSize: '14px' }}
-                >
-                  Registrarse
-                </Link>
-              </>
-            )}
-          </div>
-        </div>
+        <div
+          className="sidebar-overlay"
+          onClick={() => setMenuOpen(false)}
+          aria-hidden="true"
+        />
       )}
+
+      {/* Mobile sidebar drawer – always in DOM so CSS transition works on close */}
+      <div
+        className={`mobile-sidebar${menuOpen ? ' mobile-sidebar--open' : ''}`}
+        role="dialog"
+        aria-modal={menuOpen}
+        aria-label="Menú de navegación"
+      >
+        {/* Close button */}
+        <button
+          className="sidebar-close-btn"
+          onClick={() => setMenuOpen(false)}
+          aria-label="Cerrar menú"
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+        </button>
+
+        {/* Nav links */}
+        <nav style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+          <Link href="/" className="sidebar-link">Catálogo</Link>
+          <Link href="/favorites" className="sidebar-link">Favoritos</Link>
+          <Link href="/cart" className="sidebar-link">Carrito</Link>
+          {mounted && !loading && user?.groups?.includes('admin') && (
+            <Link href="/admin" className="sidebar-link sidebar-link--admin">Admin</Link>
+          )}
+        </nav>
+
+        {/* Auth footer pushed to bottom */}
+        <div className="sidebar-auth-footer">
+          {!mounted || loading ? null : user ? (
+            <>
+              <Link href="/profile" className="sidebar-link">Mi perfil</Link>
+              <button
+                className="btn btn-secondary"
+                onClick={handleLogout}
+                style={{ width: '100%', fontSize: '14px' }}
+              >
+                Cerrar sesión
+              </button>
+            </>
+          ) : (
+            <>
+              <Link href="/auth/login" className="sidebar-link">Iniciar sesión</Link>
+              <Link
+                href="/auth/register"
+                className="btn btn-primary"
+                style={{ width: '100%', textAlign: 'center', fontSize: '14px' }}
+              >
+                Registrarse
+              </Link>
+            </>
+          )}
+        </div>
+      </div>
     </header>
   );
 }
