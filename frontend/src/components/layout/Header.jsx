@@ -3,198 +3,209 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useAuth } from '@/modules/auth/AuthContext';
 
-const headerStyle = {
-  backgroundColor: 'var(--color-surface-container-lowest)',
-  borderBottom: '1px solid var(--color-outline-variant)',
-  position: 'sticky',
-  top: 0,
-  zIndex: 100,
-};
-
-const innerStyle = {
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'space-between',
-  height: '64px',
-  gap: '24px',
-};
-
-const navStyle = {
-  display: 'flex',
-  alignItems: 'center',
-  gap: '28px',
-  listStyle: 'none',
-};
-
-const authStyle = {
-  display: 'flex',
-  alignItems: 'center',
-  gap: '16px',
-  whiteSpace: 'nowrap',
-  flexShrink: 0,
-};
-
-const greetingStyle = {
-  fontSize: '14px',
-  color: 'var(--color-on-surface-variant)',
-};
-
-const dividerStyle = {
-  width: '1px',
-  height: '16px',
-  backgroundColor: 'var(--color-outline-variant)',
-};
-
 export default function Header() {
-  const router = useRouter();
-  const { user, loading, logout } = useAuth();
-  const [mounted, setMounted] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-
-  useEffect(() => setMounted(true), []);
+  const { user, logout } = useAuth();
+  const router = useRouter();
 
   useEffect(() => {
     setMenuOpen(false);
-  }, [router.pathname]);
+  }, [router.asPath]);
 
   function handleLogout() {
     logout();
     router.push('/');
   }
 
-  return (
-    <header style={headerStyle}>
-      <div className="container" style={innerStyle}>
-        {/* Logo – always visible */}
-        <Link href="/" className="vestar-logo">VESTAR</Link>
+  const isAdmin = user?.groups?.includes('admin');
 
-        {/* Mobile: greeting when logged in (hidden on desktop via CSS) */}
-        {mounted && !loading && user && (
-          <span className="header-mobile-greeting">Hola, {user.given_name}</span>
+  return (
+    <>
+      {/* ── Barra superior ── */}
+      <header style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        padding: '0 16px',
+        height: '60px',
+        backgroundColor: 'var(--color-background)',
+        borderBottom: '1px solid var(--color-outline-variant)',
+        position: 'sticky',
+        top: 0,
+        zIndex: 100,
+      }}>
+        {/* Izquierda: logo */}
+        <Link href="/" style={{ fontWeight: 'bold', color: 'var(--color-primary)', textDecoration: 'none' }}>
+          VESTAR
+        </Link>
+
+        {/* Centro: saludo (mobile) + nav (desktop) */}
+        {user && (
+          <span style={{ fontSize: '13px', color: 'var(--color-text-secondary)' }}>
+            Hola, {user.given_name}
+          </span>
         )}
 
-        {/* Desktop nav */}
-        <nav className="nav-desktop" style={{ flex: 1 }}>
-          <ul style={navStyle}>
-            <li><Link href="/" className="nav-link">Catálogo</Link></li>
-            <li><Link href="/favorites" className="nav-link">Favoritos</Link></li>
-            <li><Link href="/cart" className="nav-link">Carrito</Link></li>
-          </ul>
-        </nav>
-
-        {/* Desktop auth */}
-        <div style={authStyle} className="auth-desktop">
-          {!mounted || loading ? null : user ? (
+        {/* Derecha desktop: nav + auth */}
+        <nav style={{
+          display: 'none',
+          alignItems: 'center',
+          gap: '20px',
+        }} className="header-desktop-nav">
+          <Link href="/" style={navLinkStyle}>Catálogo</Link>
+          <Link href="/favorites" style={navLinkStyle}>Favoritos</Link>
+          <Link href="/cart" style={navLinkStyle}>Carrito</Link>
+          {isAdmin && (
+            <Link href="/admin" style={{ ...navLinkStyle, color: 'var(--color-secondary)', fontWeight: '600' }}>Admin</Link>
+          )}
+          {user ? (
             <>
-              {user.groups?.includes('admin') && (
-                <>
-                  <Link href="/admin" className="nav-link" style={{ color: 'var(--color-secondary)', fontWeight: '600' }}>Admin</Link>
-                  <div style={dividerStyle} />
-                </>
-              )}
-              <span style={greetingStyle}>Hola, {user.given_name}</span>
-              <Link href="/profile" className="nav-link">Mi perfil</Link>
-              <button
-                className="btn btn-secondary"
-                onClick={handleLogout}
-                style={{ padding: '8px 16px', fontSize: '13px' }}
-              >
+              <Link href="/profile" style={navLinkStyle}>Mi perfil</Link>
+              <button className="btn btn-secondary" onClick={handleLogout} style={{ padding: '6px 14px', fontSize: '13px' }}>
                 Cerrar sesión
               </button>
             </>
           ) : (
             <>
-              <Link href="/auth/login" className="nav-link">Iniciar sesión</Link>
-              <Link
-                href="/auth/register"
-                className="btn btn-primary"
-                style={{ padding: '8px 18px', fontSize: '13px' }}
-              >
+              <Link href="/auth/login" style={navLinkStyle}>Iniciar sesión</Link>
+              <Link href="/auth/register" className="btn btn-primary" style={{ padding: '6px 14px', fontSize: '13px' }}>
                 Registrarse
               </Link>
             </>
           )}
-        </div>
+        </nav>
 
-        {/* Mobile hamburger (hidden on desktop via CSS) */}
+        {/* Derecha mobile: hamburger */}
         <button
-          className="mobile-menu-btn"
           onClick={() => setMenuOpen(true)}
           aria-label="Abrir menú"
+          className="header-mobile-hamburger"
+          style={{
+            background: 'none',
+            border: 'none',
+            cursor: 'pointer',
+            padding: '4px',
+            color: 'var(--color-text)',
+            display: 'flex',
+            alignItems: 'center',
+          }}
         >
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <line x1="3" y1="12" x2="21" y2="12" />
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <line x1="3" y1="6" x2="21" y2="6" />
+            <line x1="3" y1="12" x2="21" y2="12" />
             <line x1="3" y1="18" x2="21" y2="18" />
           </svg>
         </button>
-      </div>
+      </header>
 
-      {/* Mobile backdrop – conditionally rendered */}
+      {/* ── Sidebar + overlay (solo mobile, solo cuando menuOpen) ── */}
       {menuOpen && (
-        <div
-          className="sidebar-overlay"
-          onClick={() => setMenuOpen(false)}
-          aria-hidden="true"
-        />
+        <>
+          {/* Overlay */}
+          <div
+            onClick={() => setMenuOpen(false)}
+            style={{
+              position: 'fixed',
+              inset: 0,
+              backgroundColor: 'rgba(0,0,0,0.5)',
+              zIndex: 199,
+            }}
+          />
+
+          {/* Sidebar */}
+          <div style={{
+            position: 'fixed',
+            top: 0,
+            right: 0,
+            height: '100vh',
+            width: '280px',
+            backgroundColor: 'var(--color-surface)',
+            zIndex: 200,
+            display: 'flex',
+            flexDirection: 'column',
+            padding: '24px 16px',
+          }}>
+            {/* Botón cerrar */}
+            <button
+              onClick={() => setMenuOpen(false)}
+              aria-label="Cerrar menú"
+              style={{
+                alignSelf: 'flex-end',
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer',
+                padding: '4px',
+                color: 'var(--color-text)',
+                marginBottom: '16px',
+              }}
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />
+              </svg>
+            </button>
+
+            {/* Links de navegación */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+              <Link href="/" style={sidebarLinkStyle}>Catálogo</Link>
+              <Link href="/favorites" style={sidebarLinkStyle}>Favoritos</Link>
+              <Link href="/cart" style={sidebarLinkStyle}>Carrito</Link>
+              {isAdmin && (
+                <Link href="/admin" style={{ ...sidebarLinkStyle, color: 'var(--color-secondary)', fontWeight: '600' }}>Admin</Link>
+              )}
+            </div>
+
+            {/* Divisor */}
+            <div style={{ borderTop: '1px solid var(--color-outline-variant)', margin: '16px 0' }} />
+
+            {/* Auth */}
+            {user ? (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                <Link href="/profile" style={sidebarLinkStyle}>Mi perfil</Link>
+                <button
+                  className="btn btn-secondary"
+                  onClick={handleLogout}
+                  style={{ width: '100%', fontSize: '14px' }}
+                >
+                  Cerrar sesión
+                </button>
+              </div>
+            ) : (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                <Link href="/auth/login" style={sidebarLinkStyle}>Iniciar sesión</Link>
+                <Link href="/auth/register" className="btn btn-primary" style={{ width: '100%', textAlign: 'center', fontSize: '14px' }}>
+                  Registrarse
+                </Link>
+              </div>
+            )}
+          </div>
+        </>
       )}
 
-      {/* Mobile sidebar drawer – always in DOM so CSS transition works on close */}
-      <div
-        className={`mobile-sidebar${menuOpen ? ' mobile-sidebar--open' : ''}`}
-        role="dialog"
-        aria-modal={menuOpen}
-        aria-label="Menú de navegación"
-      >
-        {/* Close button */}
-        <button
-          className="sidebar-close-btn"
-          onClick={() => setMenuOpen(false)}
-          aria-label="Cerrar menú"
-        >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <line x1="18" y1="6" x2="6" y2="18" />
-            <line x1="6" y1="6" x2="18" y2="18" />
-          </svg>
-        </button>
-
-        {/* Nav links */}
-        <nav style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-          <Link href="/" className="sidebar-link">Catálogo</Link>
-          <Link href="/favorites" className="sidebar-link">Favoritos</Link>
-          <Link href="/cart" className="sidebar-link">Carrito</Link>
-          {mounted && !loading && user?.groups?.includes('admin') && (
-            <Link href="/admin" className="sidebar-link sidebar-link--admin">Admin</Link>
-          )}
-        </nav>
-
-        {/* Auth footer pushed to bottom */}
-        <div className="sidebar-auth-footer">
-          {!mounted || loading ? null : user ? (
-            <>
-              <Link href="/profile" className="sidebar-link">Mi perfil</Link>
-              <button
-                className="btn btn-secondary"
-                onClick={handleLogout}
-                style={{ width: '100%', fontSize: '14px' }}
-              >
-                Cerrar sesión
-              </button>
-            </>
-          ) : (
-            <>
-              <Link href="/auth/login" className="sidebar-link">Iniciar sesión</Link>
-              <Link
-                href="/auth/register"
-                className="btn btn-primary"
-                style={{ width: '100%', textAlign: 'center', fontSize: '14px' }}
-              >
-                Registrarse
-              </Link>
-            </>
-          )}
-        </div>
-      </div>
-    </header>
+      <style jsx>{`
+        @media (min-width: 640px) {
+          .header-desktop-nav {
+            display: flex !important;
+          }
+          .header-mobile-hamburger {
+            display: none !important;
+          }
+        }
+      `}</style>
+    </>
   );
 }
+
+const navLinkStyle = {
+  textDecoration: 'none',
+  color: 'var(--color-text)',
+  fontSize: '14px',
+};
+
+const sidebarLinkStyle = {
+  textDecoration: 'none',
+  color: 'var(--color-text)',
+  fontSize: '15px',
+  padding: '10px 8px',
+  borderRadius: '8px',
+};
