@@ -1,13 +1,6 @@
 import { useState } from 'react';
 
 const fieldStyle = { display: 'flex', flexDirection: 'column', gap: '6px' };
-const labelStyle = {
-  fontSize: '13px',
-  fontWeight: '600',
-  color: 'var(--color-on-surface-variant)',
-  textTransform: 'uppercase',
-  letterSpacing: '0.04em',
-};
 
 function toTagString(tags) {
   if (Array.isArray(tags)) return tags.join(', ');
@@ -67,7 +60,7 @@ export default function ProductForm({ initialValues, categories, onSubmit }) {
   return (
     <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px', maxWidth: '640px' }}>
       <div style={fieldStyle}>
-        <label style={labelStyle}>Nombre *</label>
+        <label className="field-label">Nombre *</label>
         <input
           className="form-input"
           name="name"
@@ -79,7 +72,7 @@ export default function ProductForm({ initialValues, categories, onSubmit }) {
       </div>
 
       <div style={fieldStyle}>
-        <label style={labelStyle}>Descripción</label>
+        <label className="field-label">Descripción</label>
         <textarea
           className="form-input"
           name="description"
@@ -93,7 +86,7 @@ export default function ProductForm({ initialValues, categories, onSubmit }) {
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
         <div style={fieldStyle}>
-          <label style={labelStyle}>Precio (S/) *</label>
+          <label className="field-label">Precio (S/) *</label>
           <input
             className="form-input"
             type="number"
@@ -108,7 +101,7 @@ export default function ProductForm({ initialValues, categories, onSubmit }) {
         </div>
 
         <div style={fieldStyle}>
-          <label style={labelStyle}>Categoría *</label>
+          <label className="field-label">Categoría *</label>
           <select
             className="form-input"
             name="category_id"
@@ -128,7 +121,7 @@ export default function ProductForm({ initialValues, categories, onSubmit }) {
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px' }}>
         <div style={fieldStyle}>
-          <label style={labelStyle}>Ancho (cm)</label>
+          <label className="field-label">Ancho (cm)</label>
           <input
             className="form-input"
             type="number"
@@ -140,7 +133,7 @@ export default function ProductForm({ initialValues, categories, onSubmit }) {
           />
         </div>
         <div style={fieldStyle}>
-          <label style={labelStyle}>Alto (cm)</label>
+          <label className="field-label">Alto (cm)</label>
           <input
             className="form-input"
             type="number"
@@ -152,7 +145,7 @@ export default function ProductForm({ initialValues, categories, onSubmit }) {
           />
         </div>
         <div style={fieldStyle}>
-          <label style={labelStyle}>Profundidad (cm)</label>
+          <label className="field-label">Profundidad (cm)</label>
           <input
             className="form-input"
             type="number"
@@ -167,7 +160,7 @@ export default function ProductForm({ initialValues, categories, onSubmit }) {
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
         <div style={fieldStyle}>
-          <label style={labelStyle}>Materiales</label>
+          <label className="field-label">Materiales</label>
           <input
             className="form-input"
             name="materials"
@@ -177,7 +170,7 @@ export default function ProductForm({ initialValues, categories, onSubmit }) {
           />
         </div>
         <div style={fieldStyle}>
-          <label style={labelStyle}>Estilo</label>
+          <label className="field-label">Estilo</label>
           <input
             className="form-input"
             name="style"
@@ -190,7 +183,7 @@ export default function ProductForm({ initialValues, categories, onSubmit }) {
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
         <div style={fieldStyle}>
-          <label style={labelStyle}>Stock</label>
+          <label className="field-label">Stock</label>
           <input
             className="form-input"
             type="number"
@@ -202,7 +195,7 @@ export default function ProductForm({ initialValues, categories, onSubmit }) {
           />
         </div>
         <div style={fieldStyle}>
-          <label style={labelStyle}>Tags (separados por coma)</label>
+          <label className="field-label">Tags (separados por coma)</label>
           <input
             className="form-input"
             name="tags"

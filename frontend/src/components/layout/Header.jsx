@@ -26,27 +26,22 @@ const logoStyle = {
   color: 'var(--color-primary)',
   textDecoration: 'none',
   whiteSpace: 'nowrap',
+  flexShrink: 0,
 };
 
 const navStyle = {
   display: 'flex',
   alignItems: 'center',
-  gap: '20px',
+  gap: '28px',
   listStyle: 'none',
-};
-
-const navLinkStyle = {
-  fontSize: '14px',
-  fontWeight: '500',
-  color: 'var(--color-on-surface)',
-  textDecoration: 'none',
 };
 
 const authStyle = {
   display: 'flex',
   alignItems: 'center',
-  gap: '12px',
+  gap: '16px',
   whiteSpace: 'nowrap',
+  flexShrink: 0,
 };
 
 const greetingStyle = {
@@ -54,12 +49,23 @@ const greetingStyle = {
   color: 'var(--color-on-surface-variant)',
 };
 
+const dividerStyle = {
+  width: '1px',
+  height: '16px',
+  backgroundColor: 'var(--color-outline-variant)',
+};
+
 export default function Header() {
   const router = useRouter();
   const { user, loading, logout } = useAuth();
   const [mounted, setMounted] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => setMounted(true), []);
+
+  useEffect(() => {
+    setMenuOpen(false);
+  }, [router.pathname]);
 
   function handleLogout() {
     logout();
@@ -73,22 +79,27 @@ export default function Header() {
           Muebles &amp; Deco
         </Link>
 
-        <nav>
+        {/* Desktop nav */}
+        <nav className="nav-desktop" style={{ flex: 1 }}>
           <ul style={navStyle}>
-            <li><Link href="/" style={navLinkStyle}>Catálogo</Link></li>
-            <li><Link href="/favorites" style={navLinkStyle}>Favoritos</Link></li>
-            <li><Link href="/cart" style={navLinkStyle}>Carrito</Link></li>
+            <li><Link href="/" className="nav-link">Catálogo</Link></li>
+            <li><Link href="/favorites" className="nav-link">Favoritos</Link></li>
+            <li><Link href="/cart" className="nav-link">Carrito</Link></li>
           </ul>
         </nav>
 
-        <div style={authStyle}>
+        {/* Desktop auth */}
+        <div style={authStyle} className="auth-desktop">
           {!mounted || loading ? null : user ? (
             <>
               {user.groups?.includes('admin') && (
-                <Link href="/admin" style={navLinkStyle}>Admin</Link>
+                <>
+                  <Link href="/admin" className="nav-link" style={{ color: 'var(--color-secondary)', fontWeight: '600' }}>Admin</Link>
+                  <div style={dividerStyle} />
+                </>
               )}
               <span style={greetingStyle}>Hola, {user.given_name}</span>
-              <Link href="/profile" style={navLinkStyle}>Mi perfil</Link>
+              <Link href="/profile" className="nav-link">Mi perfil</Link>
               <button
                 className="btn btn-secondary"
                 onClick={handleLogout}
@@ -99,18 +110,78 @@ export default function Header() {
             </>
           ) : (
             <>
-              <Link href="/auth/login" style={navLinkStyle}>Iniciar sesión</Link>
+              <Link href="/auth/login" className="nav-link">Iniciar sesión</Link>
               <Link
                 href="/auth/register"
                 className="btn btn-primary"
-                style={{ padding: '8px 16px', fontSize: '13px' }}
+                style={{ padding: '8px 18px', fontSize: '13px' }}
               >
                 Registrarse
               </Link>
             </>
           )}
         </div>
+
+        {/* Mobile hamburger */}
+        <button
+          className="mobile-menu-btn"
+          onClick={() => setMenuOpen((o) => !o)}
+          aria-label={menuOpen ? 'Cerrar menú' : 'Abrir menú'}
+        >
+          {menuOpen ? (
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          ) : (
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="3" y1="12" x2="21" y2="12" />
+              <line x1="3" y1="6" x2="21" y2="6" />
+              <line x1="3" y1="18" x2="21" y2="18" />
+            </svg>
+          )}
+        </button>
       </div>
+
+      {/* Mobile nav overlay */}
+      {menuOpen && (
+        <div className="mobile-nav">
+          <Link href="/" className="nav-link" style={{ fontSize: '16px' }}>Catálogo</Link>
+          <Link href="/favorites" className="nav-link" style={{ fontSize: '16px' }}>Favoritos</Link>
+          <Link href="/cart" className="nav-link" style={{ fontSize: '16px' }}>Carrito</Link>
+
+          <div style={{ height: '1px', backgroundColor: 'var(--color-outline-variant)' }} />
+
+          {!mounted || loading ? null : user ? (
+            <>
+              {user.groups?.includes('admin') && (
+                <Link href="/admin" className="nav-link" style={{ fontSize: '16px', color: 'var(--color-secondary)', fontWeight: '600' }}>
+                  Admin
+                </Link>
+              )}
+              <Link href="/profile" className="nav-link" style={{ fontSize: '16px' }}>Mi perfil</Link>
+              <button
+                className="btn btn-secondary"
+                onClick={handleLogout}
+                style={{ width: '100%', fontSize: '14px' }}
+              >
+                Cerrar sesión
+              </button>
+            </>
+          ) : (
+            <>
+              <Link href="/auth/login" className="nav-link" style={{ fontSize: '16px' }}>Iniciar sesión</Link>
+              <Link
+                href="/auth/register"
+                className="btn btn-primary"
+                style={{ width: '100%', textAlign: 'center', fontSize: '14px' }}
+              >
+                Registrarse
+              </Link>
+            </>
+          )}
+        </div>
+      )}
     </header>
   );
 }

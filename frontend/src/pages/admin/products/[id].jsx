@@ -54,17 +54,7 @@ export default function EditProductPage() {
       </Head>
       <AdminGuard>
         <Layout>
-          <h1
-            style={{
-              fontFamily: 'var(--font-display)',
-              fontWeight: '600',
-              fontSize: '28px',
-              marginBottom: '32px',
-              color: 'var(--color-on-surface)',
-            }}
-          >
-            Editar producto
-          </h1>
+          <h1 className="page-heading">Editar producto</h1>
 
           {loading && (
             <p style={{ color: 'var(--color-on-surface-variant)' }}>Cargando producto...</p>

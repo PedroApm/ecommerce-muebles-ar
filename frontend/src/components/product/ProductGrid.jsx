@@ -1,11 +1,5 @@
 import ProductCard from './ProductCard';
 
-const gridStyle = {
-  display: 'grid',
-  gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))',
-  gap: 'var(--space-gutter)',
-};
-
 const emptyStyle = {
   gridColumn: '1 / -1',
   textAlign: 'center',
@@ -15,7 +9,7 @@ const emptyStyle = {
 
 export default function ProductGrid({ products }) {
   return (
-    <div style={gridStyle}>
+    <div className="product-grid">
       {products.length === 0 ? (
         <p style={emptyStyle}>No hay productos en esta categoría.</p>
       ) : (

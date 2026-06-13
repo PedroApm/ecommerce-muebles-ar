@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useAuth } from '@/modules/auth/AuthContext';
 import { apiFetch } from '@/lib/apiClient';
@@ -16,6 +17,36 @@ function translateError(err) {
   return COGNITO_ERRORS[err.code] || err.message;
 }
 
+const pageStyle = {
+  minHeight: '100vh',
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  justifyContent: 'center',
+  backgroundColor: 'var(--color-background)',
+  padding: '24px 20px',
+};
+
+const titleStyle = {
+  fontFamily: 'var(--font-display)',
+  fontSize: '22px',
+  fontWeight: '600',
+  color: 'var(--color-on-surface)',
+  marginBottom: '6px',
+};
+
+const subtitleStyle = {
+  fontSize: '14px',
+  color: 'var(--color-on-surface-variant)',
+  marginBottom: '24px',
+};
+
+const formStyle = {
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '16px',
+};
+
 const fieldStyle = {
   display: 'flex',
   flexDirection: 'column',
@@ -23,47 +54,9 @@ const fieldStyle = {
 };
 
 const labelStyle = {
-  fontSize: '14px',
+  fontSize: '13px',
   fontWeight: '600',
   color: 'var(--color-on-surface)',
-};
-
-const pageStyle = {
-  minHeight: '100vh',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  backgroundColor: 'var(--color-background)',
-  padding: '20px',
-};
-
-const cardStyle = {
-  backgroundColor: 'var(--color-surface-container-lowest)',
-  borderRadius: 'var(--radius-lg)',
-  padding: '40px',
-  width: '100%',
-  maxWidth: '440px',
-  boxShadow: 'var(--shadow-float)',
-};
-
-const titleStyle = {
-  fontFamily: 'var(--font-display)',
-  fontSize: '24px',
-  fontWeight: '600',
-  color: 'var(--color-on-surface)',
-  marginBottom: '8px',
-};
-
-const subtitleStyle = {
-  fontSize: '14px',
-  color: 'var(--color-on-surface-variant)',
-  marginBottom: '28px',
-};
-
-const formStyle = {
-  display: 'flex',
-  flexDirection: 'column',
-  gap: '16px',
 };
 
 const errorStyle = {
@@ -91,6 +84,19 @@ const linkStyle = {
   color: 'var(--color-primary)',
   fontWeight: '600',
   textDecoration: 'none',
+};
+
+const stepBadgeStyle = {
+  display: 'inline-flex',
+  alignItems: 'center',
+  gap: '8px',
+  fontSize: '12px',
+  fontWeight: '600',
+  color: 'var(--color-secondary)',
+  backgroundColor: 'var(--color-secondary-container)',
+  borderRadius: 'var(--radius-full)',
+  padding: '4px 12px',
+  marginBottom: '16px',
 };
 
 export default function RegisterPage() {
@@ -156,16 +162,19 @@ export default function RegisterPage() {
   if (step === 'confirm') {
     return (
       <div style={pageStyle}>
-        <div style={cardStyle}>
+        <Link href="/" className="auth-brand">Muebles &amp; Deco</Link>
+        <div className="auth-card">
+          <div style={stepBadgeStyle}>Paso 2 de 2</div>
           <h1 style={titleStyle}>Verificá tu cuenta</h1>
           <p style={subtitleStyle}>
-            Enviamos un código de verificación a <strong>{email}</strong>.
+            Enviamos un código a <strong>{email}</strong>.
           </p>
           <form onSubmit={handleConfirm} style={formStyle}>
             {error && <div style={errorStyle}>{error}</div>}
             <div style={fieldStyle}>
-              <label style={labelStyle}>Código de verificación</label>
+              <label style={labelStyle} htmlFor="code">Código de verificación</label>
               <input
+                id="code"
                 className="form-input"
                 type="text"
                 inputMode="numeric"
@@ -174,13 +183,14 @@ export default function RegisterPage() {
                 onChange={(e) => setCode(e.target.value)}
                 required
                 autoFocus
+                style={{ letterSpacing: '0.15em', fontSize: '18px', textAlign: 'center' }}
               />
             </div>
             <button
               className="btn btn-primary"
               type="submit"
               disabled={loading}
-              style={{ width: '100%', marginTop: '8px' }}
+              style={{ width: '100%', marginTop: '4px' }}
             >
               {loading ? 'Verificando...' : 'Confirmar cuenta'}
             </button>
@@ -192,15 +202,18 @@ export default function RegisterPage() {
 
   return (
     <div style={pageStyle}>
-      <div style={cardStyle}>
+      <Link href="/" className="auth-brand">Muebles &amp; Deco</Link>
+      <div className="auth-card">
+        <div style={stepBadgeStyle}>Paso 1 de 2</div>
         <h1 style={titleStyle}>Crear cuenta</h1>
         <p style={subtitleStyle}>Ingresá tus datos para registrarte.</p>
         <form onSubmit={handleRegister} style={formStyle}>
           {error && <div style={errorStyle}>{error}</div>}
           <div style={rowStyle}>
             <div style={fieldStyle}>
-              <label style={labelStyle}>Nombre</label>
+              <label style={labelStyle} htmlFor="givenName">Nombre</label>
               <input
+                id="givenName"
                 className="form-input"
                 type="text"
                 placeholder="Juan"
@@ -210,8 +223,9 @@ export default function RegisterPage() {
               />
             </div>
             <div style={fieldStyle}>
-              <label style={labelStyle}>Apellido</label>
+              <label style={labelStyle} htmlFor="familyName">Apellido</label>
               <input
+                id="familyName"
                 className="form-input"
                 type="text"
                 placeholder="García"
@@ -222,8 +236,9 @@ export default function RegisterPage() {
             </div>
           </div>
           <div style={fieldStyle}>
-            <label style={labelStyle}>Correo electrónico</label>
+            <label style={labelStyle} htmlFor="email">Correo electrónico</label>
             <input
+              id="email"
               className="form-input"
               type="email"
               placeholder="juan@ejemplo.com"
@@ -233,8 +248,9 @@ export default function RegisterPage() {
             />
           </div>
           <div style={fieldStyle}>
-            <label style={labelStyle}>Contraseña</label>
+            <label style={labelStyle} htmlFor="password">Contraseña</label>
             <input
+              id="password"
               className="form-input"
               type="password"
               placeholder="Mínimo 8 caracteres"
@@ -248,9 +264,9 @@ export default function RegisterPage() {
             className="btn btn-primary"
             type="submit"
             disabled={loading}
-            style={{ width: '100%', marginTop: '8px' }}
+            style={{ width: '100%', marginTop: '4px' }}
           >
-            {loading ? 'Registrando...' : 'Crear cuenta'}
+            {loading ? 'Registrando...' : 'Continuar'}
           </button>
         </form>
         <p style={footerStyle}>

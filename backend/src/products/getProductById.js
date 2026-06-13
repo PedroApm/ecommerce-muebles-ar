@@ -53,6 +53,9 @@ module.exports.handler = async (event) => {
         body: JSON.stringify({ message: 'Producto no encontrado' }),
       };
     }
+    db.query('UPDATE products SET view_count = view_count + 1 WHERE id = $1', [id])
+      .catch((err) => console.error('Error incrementing view_count:', err));
+
     return {
       statusCode: 200,
       headers: { 'Content-Type': 'application/json' },

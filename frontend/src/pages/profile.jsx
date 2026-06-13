@@ -88,17 +88,7 @@ export default function ProfilePage() {
         <title>Mi perfil — Muebles &amp; Deco</title>
       </Head>
       <Layout>
-        <h1
-          style={{
-            fontFamily: 'var(--font-display)',
-            fontWeight: '600',
-            fontSize: '28px',
-            marginBottom: '40px',
-            color: 'var(--color-on-surface)',
-          }}
-        >
-          Mi perfil
-        </h1>
+        <h1 className="page-heading">Mi perfil</h1>
 
         <div style={{ maxWidth: '520px', display: 'flex', flexDirection: 'column', gap: '32px' }}>
           {/* Datos del usuario */}

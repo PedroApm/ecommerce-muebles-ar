@@ -290,17 +290,7 @@ export default function CartPage() {
         <title>Carrito — Muebles &amp; Deco</title>
       </Head>
       <Layout>
-        <h1
-          style={{
-            fontFamily: 'var(--font-display)',
-            fontWeight: '600',
-            fontSize: '28px',
-            marginBottom: '32px',
-            color: 'var(--color-on-surface)',
-          }}
-        >
-          Tu carrito
-        </h1>
+        <h1 className="page-heading">Tu carrito</h1>
 
         {error && <p style={errorBannerStyle}>{error}</p>}
 
@@ -312,7 +302,7 @@ export default function CartPage() {
             </Link>
           </div>
         ) : (
-          <div style={pageLayoutStyle}>
+          <div style={pageLayoutStyle} className="two-col-flex">
             {/* ── Lista de ítems ── */}
             <div style={itemsColumnStyle}>
               {items.map((item) => (
@@ -327,7 +317,7 @@ export default function CartPage() {
             </div>
 
             {/* ── Resumen ── */}
-            <div style={summaryColumnStyle}>
+            <div style={summaryColumnStyle} className="col-summary">
               <div style={summaryCardStyle}>
                 <p style={summaryTitleStyle}>Resumen del pedido</p>
                 {items.map((item) => (

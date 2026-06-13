@@ -19,25 +19,17 @@ const imageWrapStyle = {
   borderRadius: 'var(--radius-lg) var(--radius-lg) 0 0',
 };
 
-const imgStyle = {
-  width: '100%',
-  height: '100%',
-  objectFit: 'cover',
-  display: 'block',
-};
-
 const placeholderStyle = {
   width: '100%',
   height: '100%',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  fontSize: '32px',
   color: 'var(--color-outline)',
 };
 
 const infoStyle = {
-  padding: '16px',
+  padding: '14px 16px 16px',
   display: 'flex',
   flexDirection: 'column',
   gap: '4px',
@@ -57,22 +49,24 @@ const nameStyle = {
   fontWeight: '500',
   fontSize: '15px',
   color: 'var(--color-on-surface)',
+  lineHeight: '1.3',
+  marginTop: '2px',
 };
 
 const footerRowStyle = {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'space-between',
-  marginTop: '8px',
+  marginTop: '10px',
 };
 
 const priceStyle = {
-  fontWeight: '600',
+  fontWeight: '700',
   fontSize: '16px',
   color: 'var(--color-primary)',
 };
 
-const favBtnStyle = {
+const favBtnBaseStyle = {
   fontSize: '12px',
   padding: '4px 10px',
   borderRadius: 'var(--radius-full)',
@@ -80,8 +74,20 @@ const favBtnStyle = {
   backgroundColor: 'transparent',
   cursor: 'pointer',
   color: 'var(--color-on-surface-variant)',
-  transition: 'background-color 150ms ease',
 };
+
+/* SVG placeholder icon */
+function FurnitureIcon() {
+  return (
+    <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" opacity="0.4">
+      <path d="M20 9V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v3" />
+      <path d="M2 11v5a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-5a2 2 0 0 0-4 0v2H6v-2a2 2 0 0 0-4 0Z" />
+      <path d="M4 18v2" />
+      <path d="M20 18v2" />
+      <path d="M12 4v9" />
+    </svg>
+  );
+}
 
 function formatPrice(price) {
   return `S/ ${Number(price).toLocaleString('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
@@ -89,7 +95,7 @@ function formatPrice(price) {
 
 export default function ProductCard({ product }) {
   const { user } = useAuth();
-  const [favLabel, setFavLabel] = useState('♥ Favorito');
+  const [favLabel, setFavLabel] = useState('+ Favorito');
 
   async function handleFavorite(e) {
     e.preventDefault();
@@ -100,7 +106,7 @@ export default function ProductCard({ product }) {
         body: JSON.stringify({ product_id: product.id }),
       });
       setFavLabel('Agregado');
-      setTimeout(() => setFavLabel('♥ Favorito'), 1500);
+      setTimeout(() => setFavLabel('+ Favorito'), 1500);
     } catch {
       // silently ignore
     }
@@ -111,9 +117,11 @@ export default function ProductCard({ product }) {
       <div style={imageWrapStyle}>
         {product.image_url ? (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={product.image_url} alt={product.name} style={imgStyle} />
+          <img src={product.image_url} alt={product.name} className="card-img" />
         ) : (
-          <div style={placeholderStyle}>🛋</div>
+          <div style={placeholderStyle}>
+            <FurnitureIcon />
+          </div>
         )}
       </div>
       <div style={infoStyle}>
@@ -122,7 +130,7 @@ export default function ProductCard({ product }) {
         <div style={footerRowStyle}>
           <span style={priceStyle}>{formatPrice(product.price)}</span>
           {user && (
-            <button style={favBtnStyle} onClick={handleFavorite}>
+            <button style={favBtnBaseStyle} className="fav-btn" onClick={handleFavorite}>
               {favLabel}
             </button>
           )}

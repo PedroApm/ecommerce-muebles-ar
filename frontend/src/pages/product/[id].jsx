@@ -3,6 +3,7 @@ import Head from 'next/head';
 import Script from 'next/script';
 import { useRouter } from 'next/router';
 import Layout from '@/components/layout/Layout';
+import ProductGrid from '@/components/product/ProductGrid';
 import { apiFetch } from '@/lib/apiClient';
 import { useAuth } from '@/modules/auth/AuthContext';
 
@@ -193,6 +194,7 @@ export default function ProductDetailPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [activeImage, setActiveImage] = useState(null);
+  const [recommended, setRecommended] = useState([]);
   const [selectedVariantId, setSelectedVariantId] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [cartMessage, setCartMessage] = useState('');
@@ -211,6 +213,15 @@ export default function ProductDetailPage() {
       })
       .catch((err) => setError(err.message || 'No se pudo cargar el producto.'))
       .finally(() => setLoading(false));
+  }, [id]);
+
+  useEffect(() => {
+    if (!id) return;
+    apiFetch('/products/top')
+      .then((top) =>
+        setRecommended(top.filter((p) => String(p.id) !== String(id)).slice(0, 3))
+      )
+      .catch(() => {});
   }, [id]);
 
   async function handleAddToCart() {
@@ -437,6 +448,16 @@ export default function ProductDetailPage() {
             </div>
           </div>
         </div>
+
+        {recommended.length > 0 && (
+          <section style={{ marginTop: '64px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}>
+              <h2 className="section-heading" style={{ margin: 0 }}>Productos recomendados</h2>
+              <div style={{ flex: 1, height: '1px', backgroundColor: 'var(--color-outline-variant)' }} />
+            </div>
+            <ProductGrid products={recommended} />
+          </section>
+        )}
       </Layout>
     </>
   );

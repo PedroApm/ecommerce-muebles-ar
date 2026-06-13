@@ -20,6 +20,12 @@
         "LogGroupName": "/aws/lambda/ecommerce-muebles-ar-backend-dev-getProductById"
       }
     },
+    "GetTopProductsLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/ecommerce-muebles-ar-backend-dev-getTopProducts"
+      }
+    },
     "WhoamiLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
@@ -188,7 +194,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-us-east-1-11f73fcd-160a",
-          "S3Key": "serverless/ecommerce-muebles-ar-backend/dev/1781318496111-2026-06-13T02:41:36.111Z/ecommerce-muebles-ar-backend.zip"
+          "S3Key": "serverless/ecommerce-muebles-ar-backend/dev/1781322747938-2026-06-13T03:52:27.938Z/ecommerce-muebles-ar-backend.zip"
         },
         "Handler": "src/products/getCategories.handler",
         "Runtime": "nodejs20.x",
@@ -218,7 +224,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-us-east-1-11f73fcd-160a",
-          "S3Key": "serverless/ecommerce-muebles-ar-backend/dev/1781318496111-2026-06-13T02:41:36.111Z/ecommerce-muebles-ar-backend.zip"
+          "S3Key": "serverless/ecommerce-muebles-ar-backend/dev/1781322747938-2026-06-13T03:52:27.938Z/ecommerce-muebles-ar-backend.zip"
         },
         "Handler": "src/products/getProducts.handler",
         "Runtime": "nodejs20.x",
@@ -248,7 +254,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-us-east-1-11f73fcd-160a",
-          "S3Key": "serverless/ecommerce-muebles-ar-backend/dev/1781318496111-2026-06-13T02:41:36.111Z/ecommerce-muebles-ar-backend.zip"
+          "S3Key": "serverless/ecommerce-muebles-ar-backend/dev/1781322747938-2026-06-13T03:52:27.938Z/ecommerce-muebles-ar-backend.zip"
         },
         "Handler": "src/products/getProductById.handler",
         "Runtime": "nodejs20.x",
@@ -273,12 +279,42 @@
         "GetProductByIdLogGroup"
       ]
     },
+    "GetTopProductsLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": "serverless-framework-deployments-us-east-1-11f73fcd-160a",
+          "S3Key": "serverless/ecommerce-muebles-ar-backend/dev/1781322747938-2026-06-13T03:52:27.938Z/ecommerce-muebles-ar-backend.zip"
+        },
+        "Handler": "src/products/getTopProducts.handler",
+        "Runtime": "nodejs20.x",
+        "FunctionName": "ecommerce-muebles-ar-backend-dev-getTopProducts",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "DATABASE_URL": "postgresql://postgres.vkqbaysalcleqyrwgacb:ProyectTecEmer2026@aws-1-us-east-1.pooler.supabase.com:6543/postgres",
+            "COGNITO_USER_POOL_ID": "us-east-1_3wUuOTyhl",
+            "COGNITO_REGION": "us-east-1"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "GetTopProductsLogGroup"
+      ]
+    },
     "WhoamiLambdaFunction": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-us-east-1-11f73fcd-160a",
-          "S3Key": "serverless/ecommerce-muebles-ar-backend/dev/1781318496111-2026-06-13T02:41:36.111Z/ecommerce-muebles-ar-backend.zip"
+          "S3Key": "serverless/ecommerce-muebles-ar-backend/dev/1781322747938-2026-06-13T03:52:27.938Z/ecommerce-muebles-ar-backend.zip"
         },
         "Handler": "src/auth/whoami.handler",
         "Runtime": "nodejs20.x",
@@ -308,7 +344,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-us-east-1-11f73fcd-160a",
-          "S3Key": "serverless/ecommerce-muebles-ar-backend/dev/1781318496111-2026-06-13T02:41:36.111Z/ecommerce-muebles-ar-backend.zip"
+          "S3Key": "serverless/ecommerce-muebles-ar-backend/dev/1781322747938-2026-06-13T03:52:27.938Z/ecommerce-muebles-ar-backend.zip"
         },
         "Handler": "src/favorites/getFavorites.handler",
         "Runtime": "nodejs20.x",
@@ -338,7 +374,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-us-east-1-11f73fcd-160a",
-          "S3Key": "serverless/ecommerce-muebles-ar-backend/dev/1781318496111-2026-06-13T02:41:36.111Z/ecommerce-muebles-ar-backend.zip"
+          "S3Key": "serverless/ecommerce-muebles-ar-backend/dev/1781322747938-2026-06-13T03:52:27.938Z/ecommerce-muebles-ar-backend.zip"
         },
         "Handler": "src/favorites/addFavorite.handler",
         "Runtime": "nodejs20.x",
@@ -368,7 +404,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-us-east-1-11f73fcd-160a",
-          "S3Key": "serverless/ecommerce-muebles-ar-backend/dev/1781318496111-2026-06-13T02:41:36.111Z/ecommerce-muebles-ar-backend.zip"
+          "S3Key": "serverless/ecommerce-muebles-ar-backend/dev/1781322747938-2026-06-13T03:52:27.938Z/ecommerce-muebles-ar-backend.zip"
         },
         "Handler": "src/favorites/removeFavorite.handler",
         "Runtime": "nodejs20.x",
@@ -398,7 +434,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-us-east-1-11f73fcd-160a",
-          "S3Key": "serverless/ecommerce-muebles-ar-backend/dev/1781318496111-2026-06-13T02:41:36.111Z/ecommerce-muebles-ar-backend.zip"
+          "S3Key": "serverless/ecommerce-muebles-ar-backend/dev/1781322747938-2026-06-13T03:52:27.938Z/ecommerce-muebles-ar-backend.zip"
         },
         "Handler": "src/auth/syncUser.handler",
         "Runtime": "nodejs20.x",
@@ -428,7 +464,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-us-east-1-11f73fcd-160a",
-          "S3Key": "serverless/ecommerce-muebles-ar-backend/dev/1781318496111-2026-06-13T02:41:36.111Z/ecommerce-muebles-ar-backend.zip"
+          "S3Key": "serverless/ecommerce-muebles-ar-backend/dev/1781322747938-2026-06-13T03:52:27.938Z/ecommerce-muebles-ar-backend.zip"
         },
         "Handler": "src/cart/getCart.handler",
         "Runtime": "nodejs20.x",
@@ -458,7 +494,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-us-east-1-11f73fcd-160a",
-          "S3Key": "serverless/ecommerce-muebles-ar-backend/dev/1781318496111-2026-06-13T02:41:36.111Z/ecommerce-muebles-ar-backend.zip"
+          "S3Key": "serverless/ecommerce-muebles-ar-backend/dev/1781322747938-2026-06-13T03:52:27.938Z/ecommerce-muebles-ar-backend.zip"
         },
         "Handler": "src/cart/addToCart.handler",
         "Runtime": "nodejs20.x",
@@ -488,7 +524,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-us-east-1-11f73fcd-160a",
-          "S3Key": "serverless/ecommerce-muebles-ar-backend/dev/1781318496111-2026-06-13T02:41:36.111Z/ecommerce-muebles-ar-backend.zip"
+          "S3Key": "serverless/ecommerce-muebles-ar-backend/dev/1781322747938-2026-06-13T03:52:27.938Z/ecommerce-muebles-ar-backend.zip"
         },
         "Handler": "src/cart/updateCartItem.handler",
         "Runtime": "nodejs20.x",
@@ -518,7 +554,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-us-east-1-11f73fcd-160a",
-          "S3Key": "serverless/ecommerce-muebles-ar-backend/dev/1781318496111-2026-06-13T02:41:36.111Z/ecommerce-muebles-ar-backend.zip"
+          "S3Key": "serverless/ecommerce-muebles-ar-backend/dev/1781322747938-2026-06-13T03:52:27.938Z/ecommerce-muebles-ar-backend.zip"
         },
         "Handler": "src/cart/removeFromCart.handler",
         "Runtime": "nodejs20.x",
@@ -548,7 +584,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-us-east-1-11f73fcd-160a",
-          "S3Key": "serverless/ecommerce-muebles-ar-backend/dev/1781318496111-2026-06-13T02:41:36.111Z/ecommerce-muebles-ar-backend.zip"
+          "S3Key": "serverless/ecommerce-muebles-ar-backend/dev/1781322747938-2026-06-13T03:52:27.938Z/ecommerce-muebles-ar-backend.zip"
         },
         "Handler": "src/cart/checkout.handler",
         "Runtime": "nodejs20.x",
@@ -578,7 +614,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-us-east-1-11f73fcd-160a",
-          "S3Key": "serverless/ecommerce-muebles-ar-backend/dev/1781318496111-2026-06-13T02:41:36.111Z/ecommerce-muebles-ar-backend.zip"
+          "S3Key": "serverless/ecommerce-muebles-ar-backend/dev/1781322747938-2026-06-13T03:52:27.938Z/ecommerce-muebles-ar-backend.zip"
         },
         "Handler": "src/admin/products/createProduct.handler",
         "Runtime": "nodejs20.x",
@@ -608,7 +644,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-us-east-1-11f73fcd-160a",
-          "S3Key": "serverless/ecommerce-muebles-ar-backend/dev/1781318496111-2026-06-13T02:41:36.111Z/ecommerce-muebles-ar-backend.zip"
+          "S3Key": "serverless/ecommerce-muebles-ar-backend/dev/1781322747938-2026-06-13T03:52:27.938Z/ecommerce-muebles-ar-backend.zip"
         },
         "Handler": "src/admin/products/updateProduct.handler",
         "Runtime": "nodejs20.x",
@@ -638,7 +674,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-us-east-1-11f73fcd-160a",
-          "S3Key": "serverless/ecommerce-muebles-ar-backend/dev/1781318496111-2026-06-13T02:41:36.111Z/ecommerce-muebles-ar-backend.zip"
+          "S3Key": "serverless/ecommerce-muebles-ar-backend/dev/1781322747938-2026-06-13T03:52:27.938Z/ecommerce-muebles-ar-backend.zip"
         },
         "Handler": "src/admin/products/deleteProduct.handler",
         "Runtime": "nodejs20.x",
@@ -663,164 +699,174 @@
         "DeleteProductLogGroup"
       ]
     },
-    "GetCategoriesLambdaVersionsPCouWyTmkVmm9heXJfSG68FkWa7CSg05uwXkzFl4Q": {
+    "GetCategoriesLambdaVersionSWJnb1YG09RDRxZxZdlrGbxCJrc6NSaKxLtjvJ7xoY": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "GetCategoriesLambdaFunction"
         },
-        "CodeSha256": "mTWr+gWaHMsmO4b2t2tSvt9hvLUl67SueVArK/J6C0E="
+        "CodeSha256": "OQKM4BcaUovRSTT4eIb37S7VmezZidKV5jGCes1EkoU="
       }
     },
-    "GetProductsLambdaVersionpNFtWKFyneDxIyUdDOurIuJAME79WBS8KrcA7AeCwY": {
+    "GetProductsLambdaVersionynW2nCyemCjajlbTAyZfzOMXLBNolfH6jzRuzb0qF4": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "GetProductsLambdaFunction"
         },
-        "CodeSha256": "mTWr+gWaHMsmO4b2t2tSvt9hvLUl67SueVArK/J6C0E="
+        "CodeSha256": "OQKM4BcaUovRSTT4eIb37S7VmezZidKV5jGCes1EkoU="
       }
     },
-    "GetProductByIdLambdaVersionB7jBJ0FtsngwXwntShFEFYcOSGb9Ui3nNg5shqQ6aE": {
+    "GetProductByIdLambdaVersionE14EzLBWR90cD8fG2vyU4A8sk8VXifhKBzOnNX4GvCk": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "GetProductByIdLambdaFunction"
         },
-        "CodeSha256": "mTWr+gWaHMsmO4b2t2tSvt9hvLUl67SueVArK/J6C0E="
+        "CodeSha256": "OQKM4BcaUovRSTT4eIb37S7VmezZidKV5jGCes1EkoU="
       }
     },
-    "WhoamiLambdaVersionKO3dzGTLJNr5vRonvsLY0LPqqlWB48JNmGEW9pI1CLc": {
+    "GetTopProductsLambdaVersionYO3FZ5JHsCGMioFbVusYlI2ugn0Rs7QAMpej5dt6DH8": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "GetTopProductsLambdaFunction"
+        },
+        "CodeSha256": "OQKM4BcaUovRSTT4eIb37S7VmezZidKV5jGCes1EkoU="
+      }
+    },
+    "WhoamiLambdaVersionCFImS9Wza5bqnbcDly1t5hf8J8KfiJXew8NlvzkKV4": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "WhoamiLambdaFunction"
         },
-        "CodeSha256": "mTWr+gWaHMsmO4b2t2tSvt9hvLUl67SueVArK/J6C0E="
+        "CodeSha256": "OQKM4BcaUovRSTT4eIb37S7VmezZidKV5jGCes1EkoU="
       }
     },
-    "GetFavoritesLambdaVersion9RKzINblqADStyXC2s55IJXATrnlhBSicIa6TiCCtcA": {
+    "GetFavoritesLambdaVersionY0ycZCrB4IkZyZW9CtLrztv5ii7NXNt2JNdiF3suFiM": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "GetFavoritesLambdaFunction"
         },
-        "CodeSha256": "mTWr+gWaHMsmO4b2t2tSvt9hvLUl67SueVArK/J6C0E="
+        "CodeSha256": "OQKM4BcaUovRSTT4eIb37S7VmezZidKV5jGCes1EkoU="
       }
     },
-    "AddFavoriteLambdaVersionvKeOk4A7SKHtOKpFN0WH9fDjHoWMeMvPZpZPqSP2fw": {
+    "AddFavoriteLambdaVersionflODVxt2tC55wj29JuLwCS2SmjCS9Ws8wNSzNDVieQ": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "AddFavoriteLambdaFunction"
         },
-        "CodeSha256": "mTWr+gWaHMsmO4b2t2tSvt9hvLUl67SueVArK/J6C0E="
+        "CodeSha256": "OQKM4BcaUovRSTT4eIb37S7VmezZidKV5jGCes1EkoU="
       }
     },
-    "RemoveFavoriteLambdaVersionc1H8QNAuNsacmJn3Ti2ljeeYC4jxRo6cqw7FCqEQZTE": {
+    "RemoveFavoriteLambdaVersion1tqimjEKqIrwJ37PlheHU0vnS44iTRQKOIbhBczlMY": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "RemoveFavoriteLambdaFunction"
         },
-        "CodeSha256": "mTWr+gWaHMsmO4b2t2tSvt9hvLUl67SueVArK/J6C0E="
+        "CodeSha256": "OQKM4BcaUovRSTT4eIb37S7VmezZidKV5jGCes1EkoU="
       }
     },
-    "SyncUserLambdaVersionnOtMHL0xnxQFMgIeygU7T2mkoVsXMmB0jtHyKPQDs": {
+    "SyncUserLambdaVersionfrlxgn6lmadcU6u0Zh79pLWkhCsZ5ITHj8t1FQXYvs": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "SyncUserLambdaFunction"
         },
-        "CodeSha256": "mTWr+gWaHMsmO4b2t2tSvt9hvLUl67SueVArK/J6C0E="
+        "CodeSha256": "OQKM4BcaUovRSTT4eIb37S7VmezZidKV5jGCes1EkoU="
       }
     },
-    "GetCartLambdaVersiongzkP3jvbGltA4ehwUX2L5sbYsTriodbGfHY7mYCNo": {
+    "GetCartLambdaVersionpeduczruXbt43TwsjegenmJl26urRZIwWio15e6ahxY": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "GetCartLambdaFunction"
         },
-        "CodeSha256": "mTWr+gWaHMsmO4b2t2tSvt9hvLUl67SueVArK/J6C0E="
+        "CodeSha256": "OQKM4BcaUovRSTT4eIb37S7VmezZidKV5jGCes1EkoU="
       }
     },
-    "AddToCartLambdaVersionxRpog8qkbJGvc3WlcC8M6IHR76z3PdhjJUjIK9gd3xk": {
+    "AddToCartLambdaVersionvq69KPVJVJHhi46TGxtKLWcqcRLgow3fdo96mj2UwY": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "AddToCartLambdaFunction"
         },
-        "CodeSha256": "mTWr+gWaHMsmO4b2t2tSvt9hvLUl67SueVArK/J6C0E="
+        "CodeSha256": "OQKM4BcaUovRSTT4eIb37S7VmezZidKV5jGCes1EkoU="
       }
     },
-    "UpdateCartItemLambdaVersionScz1NHf2faSpqtpLi8JqJe2wD8unwoEkJLGBrWh2g4": {
+    "UpdateCartItemLambdaVersionrhnrMWj0Q0PQXz0lcSadV8xbcknuz218IpKZFOWdCEM": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "UpdateCartItemLambdaFunction"
         },
-        "CodeSha256": "mTWr+gWaHMsmO4b2t2tSvt9hvLUl67SueVArK/J6C0E="
+        "CodeSha256": "OQKM4BcaUovRSTT4eIb37S7VmezZidKV5jGCes1EkoU="
       }
     },
-    "RemoveFromCartLambdaVersionwvy8A6vkKBKA9bhXOvVtgRgbqHqHspxa8TlDzyM": {
+    "RemoveFromCartLambdaVersionR9Wkibgdw08BEf70UCEko7scrMNCgNgUpsFodvdxLMM": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "RemoveFromCartLambdaFunction"
         },
-        "CodeSha256": "mTWr+gWaHMsmO4b2t2tSvt9hvLUl67SueVArK/J6C0E="
+        "CodeSha256": "OQKM4BcaUovRSTT4eIb37S7VmezZidKV5jGCes1EkoU="
       }
     },
-    "CheckoutLambdaVersionnyP2HPYV6VbAgbVxAglKxp0nJb1Eat443XstzISzo": {
+    "CheckoutLambdaVersionxELC90ItCbio7KTpEBmIwiYCzR5kVXv699ODe7qQw": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "CheckoutLambdaFunction"
         },
-        "CodeSha256": "mTWr+gWaHMsmO4b2t2tSvt9hvLUl67SueVArK/J6C0E="
+        "CodeSha256": "OQKM4BcaUovRSTT4eIb37S7VmezZidKV5jGCes1EkoU="
       }
     },
-    "CreateProductLambdaVersionFoEyM74Lp8UUUjpVFMCnBla5vTN9Ah9w2dM3eSKTQ": {
+    "CreateProductLambdaVersion1H6oUnVCZqMpngYjMB9HTTdBvBZdnpY0Yc4Q1GLZ77Y": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "CreateProductLambdaFunction"
         },
-        "CodeSha256": "mTWr+gWaHMsmO4b2t2tSvt9hvLUl67SueVArK/J6C0E="
+        "CodeSha256": "OQKM4BcaUovRSTT4eIb37S7VmezZidKV5jGCes1EkoU="
       }
     },
-    "UpdateProductLambdaVersion9Ua65uKrvZjIpp2tptuFYoUAix5sVBKkNUvuuA0WGmQ": {
+    "UpdateProductLambdaVersionGb0PSGlj2yV6f2SA6c5BKSQB7EZxhRPlNRKqKq1BKUk": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "UpdateProductLambdaFunction"
         },
-        "CodeSha256": "mTWr+gWaHMsmO4b2t2tSvt9hvLUl67SueVArK/J6C0E="
+        "CodeSha256": "OQKM4BcaUovRSTT4eIb37S7VmezZidKV5jGCes1EkoU="
       }
     },
-    "DeleteProductLambdaVersionzkrOph7Rq97wOPmS8SvWVfJZvwteIW9vh2ulOTkI": {
+    "DeleteProductLambdaVersionzdLp2cSgYgpP9vGuuTvtyDU8CcvMiPyqCCoQBgEw": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "DeleteProductLambdaFunction"
         },
-        "CodeSha256": "mTWr+gWaHMsmO4b2t2tSvt9hvLUl67SueVArK/J6C0E="
+        "CodeSha256": "OQKM4BcaUovRSTT4eIb37S7VmezZidKV5jGCes1EkoU="
       }
     },
     "HttpApi": {
@@ -1107,6 +1153,81 @@
         }
       },
       "DependsOn": "HttpApiIntegrationGetProductById"
+    },
+    "GetTopProductsLambdaPermissionHttpApi": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "GetTopProductsLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "HttpApi"
+              },
+              "/*"
+            ]
+          ]
+        }
+      }
+    },
+    "HttpApiIntegrationGetTopProducts": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::GetAtt": [
+            "GetTopProductsLambdaFunction",
+            "Arn"
+          ]
+        },
+        "PayloadFormatVersion": "2.0",
+        "TimeoutInMillis": 30000
+      }
+    },
+    "HttpApiRouteGetProductsTop": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "RouteKey": "GET /products/top",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "HttpApiIntegrationGetTopProducts"
+              }
+            ]
+          ]
+        }
+      },
+      "DependsOn": "HttpApiIntegrationGetTopProducts"
     },
     "WhoamiLambdaPermissionHttpApi": {
       "Type": "AWS::Lambda::Permission",
@@ -2146,7 +2267,7 @@
     "GetCategoriesLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "GetCategoriesLambdaVersionsPCouWyTmkVmm9heXJfSG68FkWa7CSg05uwXkzFl4Q"
+        "Ref": "GetCategoriesLambdaVersionSWJnb1YG09RDRxZxZdlrGbxCJrc6NSaKxLtjvJ7xoY"
       },
       "Export": {
         "Name": "sls-ecommerce-muebles-ar-backend-dev-GetCategoriesLambdaFunctionQualifiedArn"
@@ -2155,7 +2276,7 @@
     "GetProductsLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "GetProductsLambdaVersionpNFtWKFyneDxIyUdDOurIuJAME79WBS8KrcA7AeCwY"
+        "Ref": "GetProductsLambdaVersionynW2nCyemCjajlbTAyZfzOMXLBNolfH6jzRuzb0qF4"
       },
       "Export": {
         "Name": "sls-ecommerce-muebles-ar-backend-dev-GetProductsLambdaFunctionQualifiedArn"
@@ -2164,16 +2285,25 @@
     "GetProductByIdLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "GetProductByIdLambdaVersionB7jBJ0FtsngwXwntShFEFYcOSGb9Ui3nNg5shqQ6aE"
+        "Ref": "GetProductByIdLambdaVersionE14EzLBWR90cD8fG2vyU4A8sk8VXifhKBzOnNX4GvCk"
       },
       "Export": {
         "Name": "sls-ecommerce-muebles-ar-backend-dev-GetProductByIdLambdaFunctionQualifiedArn"
       }
     },
+    "GetTopProductsLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "GetTopProductsLambdaVersionYO3FZ5JHsCGMioFbVusYlI2ugn0Rs7QAMpej5dt6DH8"
+      },
+      "Export": {
+        "Name": "sls-ecommerce-muebles-ar-backend-dev-GetTopProductsLambdaFunctionQualifiedArn"
+      }
+    },
     "WhoamiLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "WhoamiLambdaVersionKO3dzGTLJNr5vRonvsLY0LPqqlWB48JNmGEW9pI1CLc"
+        "Ref": "WhoamiLambdaVersionCFImS9Wza5bqnbcDly1t5hf8J8KfiJXew8NlvzkKV4"
       },
       "Export": {
         "Name": "sls-ecommerce-muebles-ar-backend-dev-WhoamiLambdaFunctionQualifiedArn"
@@ -2182,7 +2312,7 @@
     "GetFavoritesLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "GetFavoritesLambdaVersion9RKzINblqADStyXC2s55IJXATrnlhBSicIa6TiCCtcA"
+        "Ref": "GetFavoritesLambdaVersionY0ycZCrB4IkZyZW9CtLrztv5ii7NXNt2JNdiF3suFiM"
       },
       "Export": {
         "Name": "sls-ecommerce-muebles-ar-backend-dev-GetFavoritesLambdaFunctionQualifiedArn"
@@ -2191,7 +2321,7 @@
     "AddFavoriteLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "AddFavoriteLambdaVersionvKeOk4A7SKHtOKpFN0WH9fDjHoWMeMvPZpZPqSP2fw"
+        "Ref": "AddFavoriteLambdaVersionflODVxt2tC55wj29JuLwCS2SmjCS9Ws8wNSzNDVieQ"
       },
       "Export": {
         "Name": "sls-ecommerce-muebles-ar-backend-dev-AddFavoriteLambdaFunctionQualifiedArn"
@@ -2200,7 +2330,7 @@
     "RemoveFavoriteLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "RemoveFavoriteLambdaVersionc1H8QNAuNsacmJn3Ti2ljeeYC4jxRo6cqw7FCqEQZTE"
+        "Ref": "RemoveFavoriteLambdaVersion1tqimjEKqIrwJ37PlheHU0vnS44iTRQKOIbhBczlMY"
       },
       "Export": {
         "Name": "sls-ecommerce-muebles-ar-backend-dev-RemoveFavoriteLambdaFunctionQualifiedArn"
@@ -2209,7 +2339,7 @@
     "SyncUserLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "SyncUserLambdaVersionnOtMHL0xnxQFMgIeygU7T2mkoVsXMmB0jtHyKPQDs"
+        "Ref": "SyncUserLambdaVersionfrlxgn6lmadcU6u0Zh79pLWkhCsZ5ITHj8t1FQXYvs"
       },
       "Export": {
         "Name": "sls-ecommerce-muebles-ar-backend-dev-SyncUserLambdaFunctionQualifiedArn"
@@ -2218,7 +2348,7 @@
     "GetCartLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "GetCartLambdaVersiongzkP3jvbGltA4ehwUX2L5sbYsTriodbGfHY7mYCNo"
+        "Ref": "GetCartLambdaVersionpeduczruXbt43TwsjegenmJl26urRZIwWio15e6ahxY"
       },
       "Export": {
         "Name": "sls-ecommerce-muebles-ar-backend-dev-GetCartLambdaFunctionQualifiedArn"
@@ -2227,7 +2357,7 @@
     "AddToCartLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "AddToCartLambdaVersionxRpog8qkbJGvc3WlcC8M6IHR76z3PdhjJUjIK9gd3xk"
+        "Ref": "AddToCartLambdaVersionvq69KPVJVJHhi46TGxtKLWcqcRLgow3fdo96mj2UwY"
       },
       "Export": {
         "Name": "sls-ecommerce-muebles-ar-backend-dev-AddToCartLambdaFunctionQualifiedArn"
@@ -2236,7 +2366,7 @@
     "UpdateCartItemLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "UpdateCartItemLambdaVersionScz1NHf2faSpqtpLi8JqJe2wD8unwoEkJLGBrWh2g4"
+        "Ref": "UpdateCartItemLambdaVersionrhnrMWj0Q0PQXz0lcSadV8xbcknuz218IpKZFOWdCEM"
       },
       "Export": {
         "Name": "sls-ecommerce-muebles-ar-backend-dev-UpdateCartItemLambdaFunctionQualifiedArn"
@@ -2245,7 +2375,7 @@
     "RemoveFromCartLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "RemoveFromCartLambdaVersionwvy8A6vkKBKA9bhXOvVtgRgbqHqHspxa8TlDzyM"
+        "Ref": "RemoveFromCartLambdaVersionR9Wkibgdw08BEf70UCEko7scrMNCgNgUpsFodvdxLMM"
       },
       "Export": {
         "Name": "sls-ecommerce-muebles-ar-backend-dev-RemoveFromCartLambdaFunctionQualifiedArn"
@@ -2254,7 +2384,7 @@
     "CheckoutLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "CheckoutLambdaVersionnyP2HPYV6VbAgbVxAglKxp0nJb1Eat443XstzISzo"
+        "Ref": "CheckoutLambdaVersionxELC90ItCbio7KTpEBmIwiYCzR5kVXv699ODe7qQw"
       },
       "Export": {
         "Name": "sls-ecommerce-muebles-ar-backend-dev-CheckoutLambdaFunctionQualifiedArn"
@@ -2263,7 +2393,7 @@
     "CreateProductLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "CreateProductLambdaVersionFoEyM74Lp8UUUjpVFMCnBla5vTN9Ah9w2dM3eSKTQ"
+        "Ref": "CreateProductLambdaVersion1H6oUnVCZqMpngYjMB9HTTdBvBZdnpY0Yc4Q1GLZ77Y"
       },
       "Export": {
         "Name": "sls-ecommerce-muebles-ar-backend-dev-CreateProductLambdaFunctionQualifiedArn"
@@ -2272,7 +2402,7 @@
     "UpdateProductLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "UpdateProductLambdaVersion9Ua65uKrvZjIpp2tptuFYoUAix5sVBKkNUvuuA0WGmQ"
+        "Ref": "UpdateProductLambdaVersionGb0PSGlj2yV6f2SA6c5BKSQB7EZxhRPlNRKqKq1BKUk"
       },
       "Export": {
         "Name": "sls-ecommerce-muebles-ar-backend-dev-UpdateProductLambdaFunctionQualifiedArn"
@@ -2281,7 +2411,7 @@
     "DeleteProductLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "DeleteProductLambdaVersionzkrOph7Rq97wOPmS8SvWVfJZvwteIW9vh2ulOTkI"
+        "Ref": "DeleteProductLambdaVersionzdLp2cSgYgpP9vGuuTvtyDU8CcvMiPyqCCoQBgEw"
       },
       "Export": {
         "Name": "sls-ecommerce-muebles-ar-backend-dev-DeleteProductLambdaFunctionQualifiedArn"

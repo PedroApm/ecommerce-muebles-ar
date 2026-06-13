@@ -14,7 +14,11 @@ export default function AdminGuard({ children }) {
   }, [user, loading]); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (loading) {
-    return <p style={{ padding: '40px', textAlign: 'center' }}>Cargando...</p>;
+    return (
+      <p style={{ padding: '80px 0', textAlign: 'center', color: 'var(--color-on-surface-variant)', fontFamily: 'var(--font-base)' }}>
+        Cargando...
+      </p>
+    );
   }
 
   if (user === null) return null;
@@ -22,8 +26,11 @@ export default function AdminGuard({ children }) {
   if (!user.groups.includes('admin')) {
     return (
       <div style={{ padding: '80px 0', textAlign: 'center', color: 'var(--color-on-surface-variant)' }}>
-        <p style={{ marginBottom: '16px', fontSize: '16px' }}>
-          Acceso denegado: esta sección es solo para administradores.
+        <p style={{ fontFamily: 'var(--font-display)', fontSize: '18px', fontWeight: '600', color: 'var(--color-on-surface)', marginBottom: '8px' }}>
+          Acceso denegado
+        </p>
+        <p style={{ fontSize: '15px', marginBottom: '24px' }}>
+          Esta sección es solo para administradores.
         </p>
         <Link href="/" className="btn btn-secondary">
           Volver al inicio

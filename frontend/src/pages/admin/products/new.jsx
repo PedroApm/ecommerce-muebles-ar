@@ -32,17 +32,7 @@ export default function NewProductPage() {
       </Head>
       <AdminGuard>
         <Layout>
-          <h1
-            style={{
-              fontFamily: 'var(--font-display)',
-              fontWeight: '600',
-              fontSize: '28px',
-              marginBottom: '32px',
-              color: 'var(--color-on-surface)',
-            }}
-          >
-            Nuevo producto
-          </h1>
+          <h1 className="page-heading">Nuevo producto</h1>
 
           {loadingCats ? (
             <p style={{ color: 'var(--color-on-surface-variant)' }}>Cargando categorías...</p>

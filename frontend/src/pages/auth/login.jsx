@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useAuth } from '@/modules/auth/AuthContext';
 
@@ -17,39 +18,17 @@ function translateError(err) {
 const pageStyle = {
   minHeight: '100vh',
   display: 'flex',
+  flexDirection: 'column',
   alignItems: 'center',
   justifyContent: 'center',
   backgroundColor: 'var(--color-background)',
-  padding: '20px',
-};
-
-const cardStyle = {
-  backgroundColor: 'var(--color-surface-container-lowest)',
-  borderRadius: 'var(--radius-lg)',
-  padding: '40px',
-  width: '100%',
-  maxWidth: '440px',
-  boxShadow: 'var(--shadow-float)',
-};
-
-const titleStyle = {
-  fontFamily: 'var(--font-display)',
-  fontSize: '24px',
-  fontWeight: '600',
-  color: 'var(--color-on-surface)',
-  marginBottom: '8px',
-};
-
-const subtitleStyle = {
-  fontSize: '14px',
-  color: 'var(--color-on-surface-variant)',
-  marginBottom: '28px',
+  padding: '24px 20px',
 };
 
 const formStyle = {
   display: 'flex',
   flexDirection: 'column',
-  gap: '16px',
+  gap: '18px',
 };
 
 const fieldStyle = {
@@ -59,9 +38,23 @@ const fieldStyle = {
 };
 
 const labelStyle = {
-  fontSize: '14px',
+  fontSize: '13px',
   fontWeight: '600',
   color: 'var(--color-on-surface)',
+};
+
+const titleStyle = {
+  fontFamily: 'var(--font-display)',
+  fontSize: '22px',
+  fontWeight: '600',
+  color: 'var(--color-on-surface)',
+  marginBottom: '6px',
+};
+
+const subtitleStyle = {
+  fontSize: '14px',
+  color: 'var(--color-on-surface-variant)',
+  marginBottom: '24px',
 };
 
 const errorStyle = {
@@ -110,14 +103,19 @@ export default function LoginPage() {
 
   return (
     <div style={pageStyle}>
-      <div style={cardStyle}>
+      <Link href="/" className="auth-brand">Muebles &amp; Deco</Link>
+
+      <div className="auth-card">
         <h1 style={titleStyle}>Iniciar sesión</h1>
         <p style={subtitleStyle}>Ingresá con tu cuenta para continuar.</p>
+
         <form onSubmit={handleSubmit} style={formStyle}>
           {error && <div style={errorStyle}>{error}</div>}
+
           <div style={fieldStyle}>
-            <label style={labelStyle}>Correo electrónico</label>
+            <label style={labelStyle} htmlFor="email">Correo electrónico</label>
             <input
+              id="email"
               className="form-input"
               type="email"
               placeholder="juan@ejemplo.com"
@@ -127,9 +125,11 @@ export default function LoginPage() {
               autoFocus
             />
           </div>
+
           <div style={fieldStyle}>
-            <label style={labelStyle}>Contraseña</label>
+            <label style={labelStyle} htmlFor="password">Contraseña</label>
             <input
+              id="password"
               className="form-input"
               type="password"
               placeholder="Tu contraseña"
@@ -138,15 +138,17 @@ export default function LoginPage() {
               required
             />
           </div>
+
           <button
             className="btn btn-primary"
             type="submit"
             disabled={loading}
-            style={{ width: '100%', marginTop: '8px' }}
+            style={{ width: '100%', marginTop: '4px' }}
           >
             {loading ? 'Ingresando...' : 'Ingresar'}
           </button>
         </form>
+
         <p style={footerStyle}>
           ¿No tenés cuenta?{' '}
           <a href="/auth/register" style={linkStyle}>

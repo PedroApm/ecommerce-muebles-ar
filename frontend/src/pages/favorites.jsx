@@ -138,17 +138,7 @@ export default function FavoritesPage() {
         <title>Favoritos — Muebles &amp; Deco</title>
       </Head>
       <Layout>
-        <h1
-          style={{
-            fontFamily: 'var(--font-display)',
-            fontWeight: '600',
-            fontSize: '28px',
-            marginBottom: '32px',
-            color: 'var(--color-on-surface)',
-          }}
-        >
-          Mis favoritos
-        </h1>
+        <h1 className="page-heading">Mis favoritos</h1>
 
         {favorites.length === 0 ? (
           <div style={centeredStyle}>

@@ -52,6 +52,13 @@ functions:
           path: /products/{id}
           method: GET
 
+  getTopProducts:
+    handler: src/products/getTopProducts.handler
+    events:
+      - httpApi:
+          path: /products/top
+          method: GET
+
   whoami:
     handler: src/auth/whoami.handler
     events:

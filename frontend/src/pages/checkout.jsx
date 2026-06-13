@@ -223,7 +223,7 @@ export default function CheckoutPage() {
         <title>Checkout — Muebles &amp; Deco</title>
       </Head>
       <Layout>
-        <h1 style={pageTitleStyle}>Confirmar pedido</h1>
+        <h1 className="page-heading">Confirmar pedido</h1>
 
         {items.length === 0 ? (
           <div style={centeredStyle}>
@@ -233,7 +233,7 @@ export default function CheckoutPage() {
             </Link>
           </div>
         ) : (
-          <div style={pageGridStyle}>
+          <div style={pageGridStyle} className="two-col-flex">
             {/* ── Formulario ── */}
             <div style={formColumnStyle}>
               {error && <p style={errorStyle}>{error}</p>}
@@ -281,7 +281,7 @@ export default function CheckoutPage() {
             </div>
 
             {/* ── Resumen ── */}
-            <div style={summaryColumnStyle}>
+            <div style={summaryColumnStyle} className="col-summary">
               <div style={summaryCardStyle}>
                 <p style={summaryTitleStyle}>Resumen del pedido</p>
                 {items.map((item) => (

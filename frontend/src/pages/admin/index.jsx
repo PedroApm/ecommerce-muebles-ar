@@ -76,7 +76,7 @@ export default function AdminProductsPage() {
       <AdminGuard>
         <Layout>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '32px' }}>
-            <h1 style={headingStyle}>Productos</h1>
+            <h1 className="page-heading" style={{ margin: 0 }}>Productos</h1>
             <Link href="/admin/products/new" className="btn btn-primary">
               + Nuevo producto
             </Link>
@@ -99,7 +99,7 @@ export default function AdminProductsPage() {
           )}
 
           {!loading && products.length > 0 && (
-            <div className="card" style={{ overflow: 'auto' }}>
+            <div className="table-scroll">
               <table style={tableStyle}>
                 <thead>
                   <tr>
