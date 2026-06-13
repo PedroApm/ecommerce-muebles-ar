@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import Layout from '@/components/layout/Layout';
+import LoadingSpinner from '@/components/layout/LoadingSpinner';
 import { useAuth } from '@/modules/auth/AuthContext';
 
 const sectionTitleStyle = {
@@ -51,9 +52,7 @@ export default function ProfilePage() {
   if (loading || user === null) {
     return (
       <Layout>
-        <p style={{ padding: '80px 0', textAlign: 'center', color: 'var(--color-on-surface-variant)' }}>
-          Cargando...
-        </p>
+        <LoadingSpinner />
       </Layout>
     );
   }

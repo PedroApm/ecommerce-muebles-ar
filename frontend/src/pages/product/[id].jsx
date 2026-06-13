@@ -3,6 +3,7 @@ import Head from 'next/head';
 import Script from 'next/script';
 import { useRouter } from 'next/router';
 import Layout from '@/components/layout/Layout';
+import LoadingSpinner from '@/components/layout/LoadingSpinner';
 import ProductGrid from '@/components/product/ProductGrid';
 import { apiFetch } from '@/lib/apiClient';
 import { useAuth } from '@/modules/auth/AuthContext';
@@ -250,7 +251,7 @@ export default function ProductDetailPage() {
   if (loading) {
     return (
       <Layout>
-        <p style={centeredStyle}>Cargando producto...</p>
+        <LoadingSpinner />
       </Layout>
     );
   }

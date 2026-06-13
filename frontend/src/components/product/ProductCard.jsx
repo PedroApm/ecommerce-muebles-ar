@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/modules/auth/AuthContext';
-import { apiFetch } from '@/lib/apiClient';
 
 const cardInnerStyle = {
   display: 'flex',
@@ -53,30 +52,13 @@ const nameStyle = {
   marginTop: '2px',
 };
 
-const footerRowStyle = {
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'space-between',
-  marginTop: '10px',
-};
-
 const priceStyle = {
   fontWeight: '700',
   fontSize: '16px',
   color: 'var(--color-primary)',
+  marginTop: '10px',
 };
 
-const favBtnBaseStyle = {
-  fontSize: '12px',
-  padding: '4px 10px',
-  borderRadius: 'var(--radius-full)',
-  border: '1px solid var(--color-outline-variant)',
-  backgroundColor: 'transparent',
-  cursor: 'pointer',
-  color: 'var(--color-on-surface-variant)',
-};
-
-/* SVG placeholder icon */
 function FurnitureIcon() {
   return (
     <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" opacity="0.4">
@@ -93,23 +75,17 @@ function formatPrice(price) {
   return `S/ ${Number(price).toLocaleString('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 }
 
-export default function ProductCard({ product }) {
+export default function ProductCard({ product, isFavorite = false, onToggleFavorite }) {
   const { user } = useAuth();
-  const [favLabel, setFavLabel] = useState('+ Favorito');
+  const [popping, setPopping] = useState(false);
 
-  async function handleFavorite(e) {
+  function handleFavClick(e) {
     e.preventDefault();
     e.stopPropagation();
-    try {
-      await apiFetch('/favorites', {
-        method: 'POST',
-        body: JSON.stringify({ product_id: product.id }),
-      });
-      setFavLabel('Agregado');
-      setTimeout(() => setFavLabel('+ Favorito'), 1500);
-    } catch {
-      // silently ignore
-    }
+    if (!onToggleFavorite) return;
+    setPopping(true);
+    onToggleFavorite(product.id);
+    setTimeout(() => setPopping(false), 200);
   }
 
   return (
@@ -123,19 +99,45 @@ export default function ProductCard({ product }) {
             <FurnitureIcon />
           </div>
         )}
+        {user && onToggleFavorite && (
+          <button
+            onClick={handleFavClick}
+            aria-label={isFavorite ? 'Quitar de favoritos' : 'Agregar a favoritos'}
+            style={{
+              position: 'absolute',
+              top: '8px',
+              right: '8px',
+              width: '36px',
+              height: '36px',
+              borderRadius: '50%',
+              border: 'none',
+              backgroundColor: 'rgba(255,255,255,0.85)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.12)',
+              cursor: 'pointer',
+              zIndex: 5,
+              padding: 0,
+              transform: popping ? 'scale(1.2)' : 'scale(1)',
+              transition: 'transform 0.15s ease, background-color 0.15s ease',
+            }}
+          >
+            <svg
+              width="16" height="16" viewBox="0 0 24 24"
+              fill={isFavorite ? 'var(--color-primary)' : 'none'}
+              stroke={isFavorite ? 'var(--color-primary)' : 'var(--color-on-surface-variant)'}
+              strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+            >
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+            </svg>
+          </button>
+        )}
       </div>
       <div style={infoStyle}>
         <span style={categoryStyle}>{product.category_name}</span>
         <span style={nameStyle}>{product.name}</span>
-        <div style={footerRowStyle}>
-          <span style={priceStyle}>{formatPrice(product.price)}</span>
-          {user && (
-            <button style={favBtnBaseStyle} className="fav-btn" onClick={handleFavorite}>
-              <span className="fav-btn-mobile-icon">♥</span>
-              <span className="fav-btn-desktop-text">{favLabel}</span>
-            </button>
-          )}
-        </div>
+        <span style={priceStyle}>{formatPrice(product.price)}</span>
       </div>
     </Link>
   );

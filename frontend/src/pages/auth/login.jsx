@@ -118,7 +118,7 @@ export default function LoginPage() {
         <span style={brandNameStyle}>VESTAR</span>
       </div>
 
-      <div className="auth-card" style={{ width: '100%', maxWidth: '420px' }}>
+      <div className="auth-card auth-card-animate" style={{ width: '100%', maxWidth: '420px' }}>
         {/* Tab switcher */}
         <div className="auth-tabs">
           <span className="auth-tab active">Ingresar</span>

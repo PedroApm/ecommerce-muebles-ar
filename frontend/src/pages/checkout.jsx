@@ -3,6 +3,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import Layout from '@/components/layout/Layout';
+import LoadingSpinner from '@/components/layout/LoadingSpinner';
 import { apiFetch } from '@/lib/apiClient';
 import { useAuth } from '@/modules/auth/AuthContext';
 
@@ -191,7 +192,7 @@ export default function CheckoutPage() {
   if (authLoading || cartLoading) {
     return (
       <Layout>
-        <p style={centeredStyle}>Cargando...</p>
+        <LoadingSpinner />
       </Layout>
     );
   }

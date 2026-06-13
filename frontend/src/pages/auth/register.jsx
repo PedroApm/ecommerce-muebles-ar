@@ -147,7 +147,7 @@ export default function RegisterPage() {
           <BagIcon />
           <span style={brandNameStyle}>VESTAR</span>
         </div>
-        <div className="auth-card" style={{ width: '100%', maxWidth: '420px' }}>
+        <div className="auth-card auth-card-animate" key="confirm" style={{ width: '100%', maxWidth: '420px' }}>
           <div style={{ textAlign: 'center', marginBottom: '24px' }}>
             <p style={{ fontSize: '11px', fontWeight: '700', letterSpacing: '0.07em', textTransform: 'uppercase', color: 'var(--color-secondary)', marginBottom: '6px' }}>
               Paso 2 de 2
@@ -197,7 +197,7 @@ export default function RegisterPage() {
         <span style={brandNameStyle}>VESTAR</span>
       </div>
 
-      <div className="auth-card" style={{ width: '100%', maxWidth: '420px' }}>
+      <div className="auth-card auth-card-animate" key="register" style={{ width: '100%', maxWidth: '420px' }}>
         {/* Tab switcher */}
         <div className="auth-tabs">
           <Link href="/auth/login" className="auth-tab">Ingresar</Link>

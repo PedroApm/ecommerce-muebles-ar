@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import Layout from '@/components/layout/Layout';
+import LoadingSpinner from '@/components/layout/LoadingSpinner';
 import AdminGuard from '@/components/admin/AdminGuard';
 import { apiFetch } from '@/lib/apiClient';
 
@@ -82,11 +83,7 @@ export default function AdminProductsPage() {
             </Link>
           </div>
 
-          {loading && (
-            <p style={{ color: 'var(--color-on-surface-variant)', padding: '40px 0', textAlign: 'center' }}>
-              Cargando productos...
-            </p>
-          )}
+          {loading && <LoadingSpinner />}
 
           {error && (
             <p style={{ color: 'var(--color-error)', padding: '20px 0' }}>{error}</p>

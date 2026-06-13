@@ -109,6 +109,7 @@ export default function Header() {
               inset: 0,
               backgroundColor: 'rgba(0,0,0,0.5)',
               zIndex: 199,
+              animation: 'fadeIn 0.25s ease',
             }}
           />
 
@@ -124,6 +125,8 @@ export default function Header() {
             display: 'flex',
             flexDirection: 'column',
             padding: '24px 16px',
+            boxShadow: '-8px 0 32px rgba(0,0,0,0.18)',
+            animation: 'slideInRight 0.25s ease',
           }}>
             {/* Botón cerrar */}
             <button
@@ -147,11 +150,11 @@ export default function Header() {
 
             {/* Links de navegación */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-              <Link href="/" style={sidebarLinkStyle}>Catálogo</Link>
-              <Link href="/favorites" style={sidebarLinkStyle}>Favoritos</Link>
-              <Link href="/cart" style={sidebarLinkStyle}>Carrito</Link>
+              <Link href="/" className="sidebar-link">Catálogo</Link>
+              <Link href="/favorites" className="sidebar-link">Favoritos</Link>
+              <Link href="/cart" className="sidebar-link">Carrito</Link>
               {isAdmin && (
-                <Link href="/admin" style={{ ...sidebarLinkStyle, color: 'var(--color-secondary)', fontWeight: '600' }}>Admin</Link>
+                <Link href="/admin" className="sidebar-link sidebar-link--admin">Admin</Link>
               )}
             </div>
 
@@ -161,7 +164,7 @@ export default function Header() {
             {/* Auth */}
             {user ? (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                <Link href="/profile" style={sidebarLinkStyle}>Mi perfil</Link>
+                <Link href="/profile" className="sidebar-link">Mi perfil</Link>
                 <button
                   className="btn btn-secondary"
                   onClick={handleLogout}
@@ -172,7 +175,7 @@ export default function Header() {
               </div>
             ) : (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                <Link href="/auth/login" style={sidebarLinkStyle}>Iniciar sesión</Link>
+                <Link href="/auth/login" className="sidebar-link">Iniciar sesión</Link>
                 <Link href="/auth/register" className="btn btn-primary" style={{ width: '100%', textAlign: 'center', fontSize: '14px' }}>
                   Registrarse
                 </Link>
@@ -202,10 +205,3 @@ const navLinkStyle = {
   fontSize: '14px',
 };
 
-const sidebarLinkStyle = {
-  textDecoration: 'none',
-  color: 'var(--color-text)',
-  fontSize: '15px',
-  padding: '10px 8px',
-  borderRadius: '8px',
-};
