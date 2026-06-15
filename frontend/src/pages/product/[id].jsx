@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import Head from 'next/head';
+import Script from 'next/script';
 import { useRouter } from 'next/router';
 import Layout from '@/components/layout/Layout';
 import LoadingSpinner from '@/components/layout/LoadingSpinner';
@@ -452,7 +453,12 @@ export default function ProductDetailPage() {
               <p style={sectionLabelStyle}>Realidad Aumentada</p>
               {has_ar_model && model_url ? (
                 <>
-{/* model-viewer es un custom element; se pasan atributos booleanos con spread */}
+                  <Script
+                    src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"
+                    type="module"
+                    strategy="lazyOnload"
+                  />
+                  {/* model-viewer es un custom element; se pasan atributos booleanos con spread */}
                   <model-viewer
                     src={model_url}
                     style={{
