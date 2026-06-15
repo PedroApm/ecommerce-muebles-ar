@@ -456,7 +456,7 @@ export default function ProductDetailPage() {
                   <Script
                     src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"
                     type="module"
-                    strategy="lazyOnload"
+                    strategy="afterInteractive"
                   />
                   {/* model-viewer es un custom element; se pasan atributos booleanos con spread */}
                   <model-viewer
