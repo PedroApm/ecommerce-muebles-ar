@@ -175,3 +175,30 @@ functions:
           method: DELETE
           authorizer:
             name: cognitoAuthorizer
+
+  createCategory:
+    handler: src/admin/categories/createCategory.handler
+    events:
+      - httpApi:
+          path: /admin/categories
+          method: POST
+          authorizer:
+            name: cognitoAuthorizer
+
+  updateCategory:
+    handler: src/admin/categories/updateCategory.handler
+    events:
+      - httpApi:
+          path: /admin/categories/{id}
+          method: PUT
+          authorizer:
+            name: cognitoAuthorizer
+
+  deleteCategory:
+    handler: src/admin/categories/deleteCategory.handler
+    events:
+      - httpApi:
+          path: /admin/categories/{id}
+          method: DELETE
+          authorizer:
+            name: cognitoAuthorizer
