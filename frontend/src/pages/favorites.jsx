@@ -65,7 +65,7 @@ export default function FavoritesPage() {
 
         {favorites.length === 0 ? (
           <div style={centeredStyle}>
-            <p style={{ marginBottom: '16px' }}>No tenés productos favoritos.</p>
+            <p style={{ marginBottom: '16px' }}>No tienes productos favoritos.</p>
             <Link href="/" className="btn btn-primary">
               Ver catálogo
             </Link>
