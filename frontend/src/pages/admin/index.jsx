@@ -78,9 +78,14 @@ export default function AdminProductsPage() {
         <Layout>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '32px' }}>
             <h1 className="page-heading" style={{ margin: 0 }}>Productos</h1>
-            <Link href="/admin/products/new" className="btn btn-primary">
-              + Nuevo producto
-            </Link>
+            <div style={{ display: 'flex', gap: '12px' }}>
+              <Link href="/admin/categories" className="btn btn-secondary">
+                Gestionar categorías
+              </Link>
+              <Link href="/admin/products/new" className="btn btn-primary">
+                + Nuevo producto
+              </Link>
+            </div>
           </div>
 
           {loading && <LoadingSpinner />}
