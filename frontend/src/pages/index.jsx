@@ -52,7 +52,7 @@ export default function CatalogPage() {
     if (!user) return;
     apiFetch('/favorites')
       .then((favs) => setFavoriteIds(new Set(favs.map((f) => f.id))))
-      .catch(() => {});
+      .catch(() => { });
   }, [user]);
 
   useEffect(() => {
@@ -72,14 +72,14 @@ export default function CatalogPage() {
             return next;
           });
         })
-        .catch(() => {});
+        .catch(() => { });
     } else {
       apiFetch('/favorites', {
         method: 'POST',
         body: JSON.stringify({ product_id: productId }),
       })
         .then(() => setFavoriteIds((prev) => new Set([...prev, productId])))
-        .catch(() => {});
+        .catch(() => { });
     }
   }
 
@@ -99,7 +99,7 @@ export default function CatalogPage() {
     <>
       <Head>
         <title>Catálogo — VESTAR</title>
-        <meta name="description" content="Explorá nuestro catálogo de muebles y decoración." />
+        <meta name="description" content="Explora nuestro catálogo de muebles y decoración." />
       </Head>
       <Layout>
         {loading ? (
