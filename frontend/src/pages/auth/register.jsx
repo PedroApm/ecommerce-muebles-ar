@@ -133,7 +133,7 @@ export default function RegisterPage() {
       }
       router.push('/');
     } catch {
-      setError('Tu cuenta fue creada. Por favor iniciá sesión manualmente.');
+      setError('Tu cuenta fue creada. Por favor inicia sesión manualmente.');
       router.push('/auth/login');
     } finally {
       setLoading(false);
